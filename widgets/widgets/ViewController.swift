@@ -8,67 +8,38 @@
 
 import UIKit
 
+struct PlaceHolder {
+    var width = 207
+    var height = 192
+    var filled = false
+    
+}
+
+
 class ViewController: UIViewController {
 
-    @IBOutlet weak var widgetOne: UIView!
-
     
-    @IBAction func panView(_ sender: UIPanGestureRecognizer) {
-            //
-            let translation = sender.translation(in: self.view)
-
-            if let viewToDrag = sender.view {
-                viewToDrag.center = CGPoint(x: viewToDrag.center.x + translation.x,
-                    y: viewToDrag.center.y + translation.y)
-                sender.setTranslation(CGPoint(x: 0, y: 0), in: viewToDrag)
-                
-            }
-            //
-            
-            //print("x \(translation.x)")
-            //print("y \(translation.y)")
-            
-            
-            if (abs(108.5 - sender.view!.center.x) <= 98.5 && abs(132.5 - sender.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                sender.view?.center = CGPoint(x: 108.5, y: 132.5)
-            }
-            else if (abs(305.5 - sender.view!.center.x) <= 98.5 && abs(132.5 - sender.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                sender.view?.center = CGPoint(x: 305.5, y: 132.5)
-            }
-            else if (abs(108.5 - sender.view!.center.x) <= 98.5 && abs(317.5 - sender.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                sender.view?.center = CGPoint(x: 108.5, y: 317.5)
-            }
-            else if (abs(305.5 - sender.view!.center.x) <= 98.5 && abs(317.5 - sender.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                sender.view?.center = CGPoint(x: 305.5, y: 317.5)
-            }
-            else if (abs(108.5 - sender.view!.center.x) <= 98.5 && abs(502.5 - sender.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                sender.view?.center = CGPoint(x: 108.5, y: 502.5)
-            }
-            else if (abs(305.5 - sender.view!.center.x) <= 98.5 && abs(502.5 - sender.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                sender.view?.center = CGPoint(x: 305.5, y: 502.5)
-            }
-            else if (abs(108.5 - sender.view!.center.x) <= 98.5 && abs(687.5 - sender.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                sender.view?.center = CGPoint(x: 108.5, y: 687.5)
-            }
-            else if (abs(305.5 - sender.view!.center.x) <= 98.5 && abs(687.5 - sender.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                sender.view?.center = CGPoint(x: 305.5, y: 687.5)
-            }
+    var xC = 0
+    var yC = 0
+    
+    @IBAction func addWidget(_ panGesture: UIButton) {
+        let newWidget = Widget(frame: CGRect(x: xC, y: yC, width: 177, height: 177))
+        self.view.addSubview(newWidget)
         
+        xC += 50
+        yC += 50
         
     }
-    
-    
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         //print(widgetOne.center)
-        widgetOne.layer.cornerRadius = 20
-        widgetOne.layer.masksToBounds = true
+        
     }
     
     
 
 }
+
+
