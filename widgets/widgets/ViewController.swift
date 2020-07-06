@@ -44,13 +44,13 @@ struct placeHolderArray {
 
 
 
-
 public var editOn = false
 var screenWidgets: [Widget] = []
+var placeHolders = placeHolderArray()
 
 class ViewController: UIViewController {
 
-    var placeHolders = placeHolderArray()
+    
     
     
     var xC = 0
@@ -83,15 +83,15 @@ class ViewController: UIViewController {
     func placeNextWidget(PHA: inout [[PlaceHolder]], addedWidget:Widget){
         for row in (0...7){
             for column in (0...1){
-                print("\(row) and \(column)")
+                //print("\(row) and \(column)")
                 //var slot = PHA[row][column]
-                print("Checking slot \(PHA[row][column]) which is \(PHA[row][column].filled)")
+                //print("Checking slot \(PHA[row][column]) which is \(PHA[row][column].filled)")
                 if (PHA[row][column].filled == false){
                         addedWidget.center = CGPoint(x: PHA[row][column].centerX, y: PHA[row][column].centerY)
                         //print(slot.centerX)
                         //print(slot.centerY)
                         PHA[row][column].filled = true
-                        print(PHA[row][column].filled)
+                        //print(PHA[row][column].filled)
                         return
                 }
             }

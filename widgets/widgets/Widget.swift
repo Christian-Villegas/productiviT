@@ -43,14 +43,35 @@ class Widget: UIView {
     }
     
     @objc func deleteWidget(sender: UIButton) {
-        
         if editOn == false {return}//returns if not in edit mode
         
         let alert = UIAlertController(title: "Are you sure?", message: "Deleting this widget will also delete all of its data.", preferredStyle: .alert)
 
         alert.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: {action in
-              self.removeFromSuperview()
+            
+            let wCenter = self.center
+            
+            outerLoop: for row in (0...7){
+                for column in (0...1){
+                    let phCenter = CGPoint(x: placeHolders.grid[row][column].centerX, y: placeHolders.grid[row][column].centerY)
+                    
+                    if wCenter == phCenter{
+                        placeHolders.grid[row][column].filled = false //update filled property
+                        break outerLoop
+                    }
+                }
+            }
+            
+            for i in (0...(screenWidgets.count-1)){
+                if screenWidgets[i] == self{ screenWidgets.remove(at: i) //remove from widget array
+                    break
+                }
+            }
+            
+            self.removeFromSuperview()
+            
         }))
+        
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         
         
@@ -63,10 +84,23 @@ class Widget: UIView {
             topController.present(alert, animated: true, completion: nil)
         }
     
-        
-
-        
-        
+    }
+    
+    
+    func updateFilled(){//should go in view controller
+        outerLoop: for row in (0...7){
+            for column in (0...1){
+                for i in (0...(screenWidgets.count-1)){
+                    let phCenter = CGPoint(x: placeHolders.grid[row][column].centerX, y: placeHolders.grid[row][column].centerY)
+                    
+                    if screenWidgets[i].center == phCenter{
+                        placeHolders.grid[row][column].filled = true
+                        break
+                    }
+                    placeHolders.grid[row][column].filled = false
+                }
+            }
+        }
     }
     
     @objc func changeSize(sender: UIButton) {
@@ -75,7 +109,7 @@ class Widget: UIView {
         if(self.frame.width == 177.0) {
             self.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 374.0, height: 177.0)
         } else if(self.frame.width == 374.0 && self.frame.height == 177.0) {
-            self.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 374.0, height: 374.0)
+            self.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 374.0, height: 362.0)
         } else {
             self.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 177.0, height: 177.0)
         }
@@ -100,27 +134,35 @@ class Widget: UIView {
             
             if (abs(108.5 - panGesture.view!.center.x) <= 98.5 && abs(132.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
                 panGesture.view?.center = CGPoint(x: 108.5, y: 132.5)
+                self.updateFilled()
             }
             else if (abs(305.5 - panGesture.view!.center.x) <= 98.5 && abs(132.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
                 panGesture.view?.center = CGPoint(x: 305.5, y: 132.5)
+                self.updateFilled()
             }
             else if (abs(108.5 - panGesture.view!.center.x) <= 98.5 && abs(317.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
                 panGesture.view?.center = CGPoint(x: 108.5, y: 317.5)
+                self.updateFilled()
             }
             else if (abs(305.5 - panGesture.view!.center.x) <= 98.5 && abs(317.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
                 panGesture.view?.center = CGPoint(x: 305.5, y: 317.5)
+                self.updateFilled()
             }
             else if (abs(108.5 - panGesture.view!.center.x) <= 98.5 && abs(502.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
                 panGesture.view?.center = CGPoint(x: 108.5, y: 502.5)
+                self.updateFilled()
             }
             else if (abs(305.5 - panGesture.view!.center.x) <= 98.5 && abs(502.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
                 panGesture.view?.center = CGPoint(x: 305.5, y: 502.5)
+                self.updateFilled()
             }
             else if (abs(108.5 - panGesture.view!.center.x) <= 98.5 && abs(687.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
                 panGesture.view?.center = CGPoint(x: 108.5, y: 687.5)
+                self.updateFilled()
             }
             else if (abs(305.5 - panGesture.view!.center.x) <= 98.5 && abs(687.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
                 panGesture.view?.center = CGPoint(x: 305.5, y: 687.5)
+                self.updateFilled()
             }
         
         
