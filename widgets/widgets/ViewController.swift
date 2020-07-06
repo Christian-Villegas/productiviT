@@ -43,10 +43,12 @@ struct placeHolderArray {
 }
 
 
-
+//Global variables//
 public var editOn = false
 var screenWidgets: [Widget] = []
 var placeHolders = placeHolderArray()
+///
+
 
 class ViewController: UIViewController {
 
@@ -58,6 +60,8 @@ class ViewController: UIViewController {
     
     let editButton = UIButton(type: .system) // let preferred over var here
     let addWidgetButton = UIButton(type: .system)
+    
+    
     
     
     @IBOutlet weak var widgetMenu: UITableView!
@@ -88,6 +92,7 @@ class ViewController: UIViewController {
                 //print("Checking slot \(PHA[row][column]) which is \(PHA[row][column].filled)")
                 if (PHA[row][column].filled == false){
                         addedWidget.center = CGPoint(x: PHA[row][column].centerX, y: PHA[row][column].centerY)
+                    addedWidget.ogPosition = CGPoint(x: PHA[row][column].centerX, y: PHA[row][column].centerY)
                         //print(slot.centerX)
                         //print(slot.centerY)
                         PHA[row][column].filled = true

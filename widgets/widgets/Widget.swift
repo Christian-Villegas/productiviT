@@ -20,6 +20,7 @@ class Widget: UIView {
     
     override init(frame: CGRect) {
         self.title = ""
+        self.ogPosition = CGPoint(x: 0, y: 0)
         super.init(frame: frame)
         self.backgroundColor = .lightGray
         self.alpha = 0.5
@@ -117,6 +118,9 @@ class Widget: UIView {
     }
     
     @objc func panView(_ panGesture: UIPanGestureRecognizer) {
+        //fix this, turn into a switch statement and consider placeholders
+        //replace numbers with placeholder variables (x and y) !!!!!!!!!!!!!!!!!
+        
             //
         
         if editOn == false {return}//returns if not in edit mode
@@ -132,37 +136,92 @@ class Widget: UIView {
             //
             
             
-            if (abs(108.5 - panGesture.view!.center.x) <= 98.5 && abs(132.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                panGesture.view?.center = CGPoint(x: 108.5, y: 132.5)
-                self.updateFilled()
+        if (abs(placeHolders.grid[0][0].centerX - Double(panGesture.view!.center.x)) <= 98.5 && abs(placeHolders.grid[0][0].centerY - Double(panGesture.view!.center.y)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
+                
+                if placeHolders.grid[0][0].filled == true{
+                    panGesture.view?.center = self.ogPosition
+                }
+                else{
+                    panGesture.view?.center = CGPoint(x: placeHolders.grid[0][0].centerX, y: placeHolders.grid[0][0].centerY)
+                    self.ogPosition = self.center
+                    self.updateFilled()
+                }
+        }
+        else if (abs(placeHolders.grid[0][1].centerX - Double(panGesture.view!.center.x)) <= 98.5 && abs(placeHolders.grid[0][1].centerY - Double(panGesture.view!.center.y)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
+            
+                if placeHolders.grid[0][1].filled == true{
+                    panGesture.view?.center = self.ogPosition
+                }
+                else{
+                    panGesture.view?.center = CGPoint(x: placeHolders.grid[0][1].centerX, y: placeHolders.grid[0][1].centerY)
+                    self.ogPosition = self.center
+                    self.updateFilled()
+                }
             }
-            else if (abs(305.5 - panGesture.view!.center.x) <= 98.5 && abs(132.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                panGesture.view?.center = CGPoint(x: 305.5, y: 132.5)
-                self.updateFilled()
+        else if (abs(placeHolders.grid[1][0].centerX - Double(panGesture.view!.center.x)) <= 98.5 && abs(placeHolders.grid[1][0].centerY - Double(panGesture.view!.center.y)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
+                
+                if placeHolders.grid[1][0].filled == true{
+                    panGesture.view?.center = self.ogPosition
+                }
+                else{
+                    panGesture.view?.center = CGPoint(x: placeHolders.grid[1][0].centerX, y: placeHolders.grid[1][0].centerY)
+                    self.ogPosition = self.center
+                    self.updateFilled()
+                }
             }
-            else if (abs(108.5 - panGesture.view!.center.x) <= 98.5 && abs(317.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                panGesture.view?.center = CGPoint(x: 108.5, y: 317.5)
-                self.updateFilled()
+        else if (abs(placeHolders.grid[1][1].centerX - Double(panGesture.view!.center.x)) <= 98.5 && abs(placeHolders.grid[1][1].centerY - Double(panGesture.view!.center.y)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
+                
+                if placeHolders.grid[1][1].filled == true{
+                    panGesture.view?.center = self.ogPosition
+                }
+                else{
+                    panGesture.view?.center = CGPoint(x: placeHolders.grid[1][1].centerX, y: placeHolders.grid[1][1].centerY)
+                    self.ogPosition = self.center
+                    self.updateFilled()
+                }
             }
-            else if (abs(305.5 - panGesture.view!.center.x) <= 98.5 && abs(317.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                panGesture.view?.center = CGPoint(x: 305.5, y: 317.5)
-                self.updateFilled()
+        else if (abs(placeHolders.grid[2][0].centerX - Double(panGesture.view!.center.x)) <= 98.5 && abs(placeHolders.grid[2][0].centerY - Double(panGesture.view!.center.y)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
+                
+                if placeHolders.grid[2][0].filled == true{
+                    panGesture.view?.center = self.ogPosition
+                }
+                else{
+                    panGesture.view?.center = CGPoint(x: placeHolders.grid[2][0].centerX, y: placeHolders.grid[2][0].centerY)
+                    self.ogPosition = self.center
+                    self.updateFilled()
+                }
             }
-            else if (abs(108.5 - panGesture.view!.center.x) <= 98.5 && abs(502.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                panGesture.view?.center = CGPoint(x: 108.5, y: 502.5)
-                self.updateFilled()
+        else if (abs(placeHolders.grid[2][1].centerX - Double(panGesture.view!.center.x)) <= 98.5 && abs(placeHolders.grid[2][1].centerY - Double(panGesture.view!.center.y)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
+                
+                if placeHolders.grid[2][1].filled == true{
+                    panGesture.view?.center = self.ogPosition
+                }
+                else{
+                    panGesture.view?.center = CGPoint(x: placeHolders.grid[2][1].centerX, y: placeHolders.grid[2][1].centerY)
+                    self.ogPosition = self.center
+                    self.updateFilled()
+                }
             }
-            else if (abs(305.5 - panGesture.view!.center.x) <= 98.5 && abs(502.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                panGesture.view?.center = CGPoint(x: 305.5, y: 502.5)
-                self.updateFilled()
+        else if (abs(placeHolders.grid[3][0].centerX - Double(panGesture.view!.center.x)) <= 98.5 && abs(placeHolders.grid[3][0].centerY - Double(panGesture.view!.center.y)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
+                if placeHolders.grid[3][0].filled == true{
+                    panGesture.view?.center = self.ogPosition
+                }
+                else{
+                    panGesture.view?.center = CGPoint(x: placeHolders.grid[3][0].centerX, y: placeHolders.grid[3][0].centerY)
+                    self.ogPosition = self.center
+                    self.updateFilled()
+                }
             }
-            else if (abs(108.5 - panGesture.view!.center.x) <= 98.5 && abs(687.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                panGesture.view?.center = CGPoint(x: 108.5, y: 687.5)
-                self.updateFilled()
-            }
-            else if (abs(305.5 - panGesture.view!.center.x) <= 98.5 && abs(687.5 - panGesture.view!.center.y) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
-                panGesture.view?.center = CGPoint(x: 305.5, y: 687.5)
-                self.updateFilled()
+        else if (abs(placeHolders.grid[3][1].centerX - Double(panGesture.view!.center.x)) <= 98.5 && abs(placeHolders.grid[3][1].centerY - Double(panGesture.view!.center.y)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
+                
+                if placeHolders.grid[3][1].filled == true{
+                    panGesture.view?.center = self.ogPosition
+                }
+                else{
+                    panGesture.view?.center = CGPoint(x: placeHolders.grid[3][1].centerX, y: placeHolders.grid[3][1].centerY)
+                    self.ogPosition = self.center
+                    self.updateFilled()
+                }
             }
         
         
@@ -172,7 +231,8 @@ class Widget: UIView {
     //Data Members://
     var title: String
     let delButton = UIButton(frame: CGRect(x: 135, y: 4, width: 40.0, height: 40.0))
-     let sizeButton = UIButton(frame: CGRect(x: 20.0, y: 20.0, width: 100.0, height: 40.0))
+    let sizeButton = UIButton(frame: CGRect(x: 20.0, y: 20.0, width: 100.0, height: 40.0))
+    var ogPosition: CGPoint
     
     
     //Height var (From UIView Class)
