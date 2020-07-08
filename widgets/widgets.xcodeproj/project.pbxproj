@@ -62,10 +62,10 @@
 		6EED171624A1BF8000C8AF96 /* widgets */ = {
 			isa = PBXGroup;
 			children = (
+				9670A64324B5867000C06B46 /* Todolist.swift */,
 				6EED171724A1BF8000C8AF96 /* AppDelegate.swift */,
 				6EED171924A1BF8000C8AF96 /* SceneDelegate.swift */,
 				6EED171B24A1BF8000C8AF96 /* ViewController.swift */,
-				9670A64324B5867000C06B46 /* Todolist.swift */,
 				6EED171D24A1BF8000C8AF96 /* Main.storyboard */,
 				6E04B5DA24AD42F4004E8AD2 /* SmartGoals.swift */,
 				6EF9B8C424AAE4220077D7AB /* Widget.swift */,
