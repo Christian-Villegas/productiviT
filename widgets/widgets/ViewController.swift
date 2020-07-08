@@ -103,16 +103,20 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func addSmartGoals(_ sender: UIButton) {
+    @IBAction func addToDo(_ sender: UIButton) {
         if editOn == false{return}
         
-        let smartWidget = SmartGoal(frame: CGRect(x: xC, y: yC, width: 177, height: 177))
-        self.view.insertSubview(smartWidget, belowSubview: widgetMenu)
-        screenWidgets.append(smartWidget)
-        print(screenWidgets.count)
+        let toDoWidget = ToDoWidget(frame: CGRect(x: xC, y: yC, width: 177, height: 177))
+        self.view.insertSubview(toDoWidget, belowSubview: widgetMenu)
+        screenWidgets.append(toDoWidget)
         
-        xC += 50
-        yC += 50
+        placeNextWidget(PHA: &placeHolders.grid, addedWidget: toDoWidget)
+        //self.view.addSubview(newWidget)
+        
+        self.view.insertSubview(toDoWidget, belowSubview: widgetMenu)
+        
+        screenWidgets.append(toDoWidget)
+        
     }
     
     @objc func editHome(sender: UIButton!) {
