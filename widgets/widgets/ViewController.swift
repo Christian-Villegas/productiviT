@@ -73,7 +73,7 @@ struct placeHolderArray {
     }
     
     // make this along with change size. aka make sure that if a widget size 1 is on the right column, it cant change size
-    mutating func updateFilled(){
+    mutating func updateFilled() {
         for row in (0...3){
         //iterate through columns
             for column in (0...1){
@@ -98,16 +98,34 @@ struct placeHolderArray {
                     }
                 // right column
                 } else {
-                    // the only option if its the right column is if it is size 1
+                    // the only option if its the right column is if its size 1
                     if(self.grid[row][column].widget != nil && self.grid[row][column].widget?.size == 1) {
                         self.grid[row][column].filled = true
                     }
                 }
             }
         }
+        gridPrint()
     }
-}
+    
+    func gridPrint(){
+        var statement = ""
+        for row in (0...3){
+            var addition = ""
+            for column in (0...1){
+                if self.grid[row][column].filled == true{
+                    addition.append("X")
+                }else if self.grid[row][column].filled == false{
+                    addition.append("0")
+                }
+            }
+            addition.append("\n")
+            statement.append(addition)
+        }
+        print(statement)
+    }
 
+}
 
 //Global variables//
 public var editOn = false
@@ -150,6 +168,7 @@ class ViewController: UIViewController {
                     addedWidget.center = CGPoint(x: PHA[row][column].xC, y: PHA[row][column].yC)
                     addedWidget.ogPosition = CGPoint(x: PHA[row][column].posX, y: PHA[row][column].posY)
                     PHA[row][column].filled = true
+                    addedWidget.ogCenter = addedWidget.center
                     // puts the widget to the array of placeHolders it takes
                     addedWidget.placeHoldersAccessed.append(PHA[row][column])
                     PHA[row][column].widget = addedWidget
