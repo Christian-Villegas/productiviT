@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6E04B5DB24AD42F4004E8AD2 /* SmartGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E04B5DA24AD42F4004E8AD2 /* SmartGoal.swift */; };
-		6E0D1DD724B65938005B0080 /* ToDoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0D1DD624B65938005B0080 /* ToDoWidget.swift */; };
 		6EED171824A1BF8000C8AF96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EED171724A1BF8000C8AF96 /* AppDelegate.swift */; };
 		6EED171A24A1BF8000C8AF96 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EED171924A1BF8000C8AF96 /* SceneDelegate.swift */; };
 		6EED171C24A1BF8000C8AF96 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EED171B24A1BF8000C8AF96 /* ViewController.swift */; };
@@ -20,7 +19,6 @@
 
 /* Begin PBXFileReference section */
 		6E04B5DA24AD42F4004E8AD2 /* SmartGoal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartGoal.swift; sourceTree = "<group>"; };
-		6E0D1DD624B65938005B0080 /* ToDoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoWidget.swift; sourceTree = "<group>"; };
 		6EED171424A1BF8000C8AF96 /* widgets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = widgets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EED171724A1BF8000C8AF96 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6EED171924A1BF8000C8AF96 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,7 +63,6 @@
 				6EED171724A1BF8000C8AF96 /* AppDelegate.swift */,
 				6EED171924A1BF8000C8AF96 /* SceneDelegate.swift */,
 				6EED171B24A1BF8000C8AF96 /* ViewController.swift */,
-				6E0D1DD624B65938005B0080 /* ToDoWidget.swift */,
 				6EED171D24A1BF8000C8AF96 /* Main.storyboard */,
 				6E04B5DA24AD42F4004E8AD2 /* SmartGoal.swift */,
 				6EF9B8C424AAE4220077D7AB /* Widget.swift */,
@@ -150,7 +147,6 @@
 				6EED171C24A1BF8000C8AF96 /* ViewController.swift in Sources */,
 				6E04B5DB24AD42F4004E8AD2 /* SmartGoal.swift in Sources */,
 				6EED171824A1BF8000C8AF96 /* AppDelegate.swift in Sources */,
-				6E0D1DD724B65938005B0080 /* ToDoWidget.swift in Sources */,
 				6EED171A24A1BF8000C8AF96 /* SceneDelegate.swift in Sources */,
 				6EF9B8C524AAE4220077D7AB /* Widget.swift in Sources */,
 			);
