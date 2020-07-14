@@ -104,31 +104,31 @@ class Widget: UIView {
         }
     }
    
-    func getPlaceHolder(number: Int) -> PlaceHolder{
+    func getPlaceHolder(number: Int) -> (row: Int, column: Int){
         for row in 0...3{
             for column in 0...1 {
                 if number == placeHolders.grid[row][column].number{
-                    return placeHolders.grid[row][column]
+                    return (row, column)
                 }
             }
         }
-        return placeHolders.grid[0][0]
+        return (0,0)
     }
     
-    func checkSizeAvailablility(start: PlaceHolder, desiredSize: Int) -> Bool{
-        let number = start.number
-        if(size == 1) {
-            if(getPlaceHolder(number: number + 1).filled == false){
-                return true
-            } else {return false}
-        } else if(size == 2) {
-            if(getPlaceHolder(number: number + 1).filled == true) && (getPlaceHolder(number: number + 2).filled == false) && (getPlaceHolder(number: number + 3).filled == false) {
-                return true
-            } else {return false}
-        }
-        
-        return true
-    }
+//    func checkSizeAvailablility(start: PlaceHolder, desiredSize: Int) -> Bool{
+//        let number = start.number
+//        if(size == 1) {
+//            if(getPlaceHolder(number: number + 1).filled == false){
+//                return true
+//            } else {return false}
+//        } else if(size == 2) {
+//            if(getPlaceHolder(number: number + 1).filled == true) && (getPlaceHolder(number: number + 2).filled == false) && (getPlaceHolder(number: number + 3).filled == false) {
+//                return true
+//            } else {return false}
+//        }
+//        
+//        return true
+//    }
     
     @objc func panView(_ panGesture: UIPanGestureRecognizer) {
        
@@ -172,13 +172,15 @@ class Widget: UIView {
         if(self.size == 1) {
             // row 0 column 0
             if(abs(columnZero - Double(panGestureX)) <= 98.5 && abs(rowZero - Double(panGestureY)) <= 98.5) && (translation.x == 0.0 && translation.y == 0.0) {
-                
                 // if the placeHolder is filled, we put the widget to its original position
                 if(placeHolders.grid[0][0].filled == true) {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     // supposed to rewrite the array of placeHolders
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
                     }
@@ -188,8 +190,7 @@ class Widget: UIView {
                     panGesture.view?.center = CGPoint(x: columnZero, y: rowZero)
                     self.ogPosition = CGPoint(x: placeHolders.grid[0][0].posX, y: placeHolders.grid[0][0].posY)
                     self.ogCenter = CGPoint(x: columnZero, y: rowZero)
-                    // try and fix
-                    //placeHolders.updateFilled()
+                    placeHolders.updateFilled()
                 }
             // row 0 column 1
             } else if(abs(columnOne - Double(panGestureX)) <= 98.5 && abs(rowZero - Double(panGestureY)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0) {
@@ -198,18 +199,19 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
-                        print(self.placeHoldersAccessed[index].filled)
                     }
-                    
-                    self.placeHoldersAccessed = []
+
                     self.placeHoldersAccessed = [placeHolders.grid[0][1]]
                     placeHolders.grid[0][1].widget = self
                     panGesture.view?.center = CGPoint(x: columnOne, y: rowZero)
                     self.ogPosition = CGPoint(x: placeHolders.grid[0][1].posX, y: placeHolders.grid[0][1].posY)
-                    self.ogCenter = CGPoint(x: placeHolders.grid[0][1].xC, y: placeHolders.grid[0][1].yC)
-                    //placeHolders.updateFilled()
+                    self.ogCenter = CGPoint(x: columnOne, y: rowZero)
+                    placeHolders.updateFilled()
                 }
             // row 1 column 0
             } else if(abs(columnZero - Double(panGestureX)) <= 98.5 && abs(rowOne - Double(panGestureY)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0) {
@@ -218,17 +220,19 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
-                        print(self.placeHoldersAccessed[index].filled)
                     }
 
                     self.placeHoldersAccessed = [placeHolders.grid[1][0]]
                     placeHolders.grid[1][0].widget = self
                     panGesture.view?.center = CGPoint(x: columnZero, y: rowOne)
                     self.ogPosition = CGPoint(x: placeHolders.grid[1][0].posX, y: placeHolders.grid[1][0].posY)
-                    self.ogCenter = CGPoint(x: placeHolders.grid[1][0].xC, y: placeHolders.grid[1][0].yC)
-                    //placeHolders.updateFilled()
+                    self.ogCenter = CGPoint(x: columnZero, y: rowOne)
+                    placeHolders.updateFilled()
                 }
             // row 1 column 1
             } else if(abs(columnOne - Double(panGestureX)) <= 98.5 && abs(rowOne - Double(panGestureY)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0){
@@ -237,16 +241,18 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
-                        print(self.placeHoldersAccessed[index].filled)
                     }
 
                     self.placeHoldersAccessed = [placeHolders.grid[1][1]]
                     placeHolders.grid[1][1].widget = self
                     panGesture.view?.center = CGPoint(x: columnOne, y: rowOne)
                     self.ogPosition = CGPoint(x: placeHolders.grid[1][1].posX, y: placeHolders.grid[1][1].posY)
-                    self.ogCenter = CGPoint(x: placeHolders.grid[1][1].xC, y: placeHolders.grid[1][1].yC)
+                    self.ogCenter = CGPoint(x: columnOne, y: rowOne)
                     placeHolders.updateFilled()
                 }
             // row 2 column 0
@@ -256,6 +262,9 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
                     }
@@ -264,7 +273,7 @@ class Widget: UIView {
                     placeHolders.grid[2][0].widget = self
                     panGesture.view?.center = CGPoint(x: columnZero, y: rowTwo)
                     self.ogPosition = CGPoint(x: placeHolders.grid[2][0].posX, y: placeHolders.grid[2][0].posY)
-                    self.ogCenter = CGPoint(x: placeHolders.grid[2][0].xC, y: placeHolders.grid[2][0].yC)
+                    self.ogCenter = CGPoint(x: columnZero, y: rowTwo)
                     placeHolders.updateFilled()
                 }
             // row 2 column 1
@@ -274,6 +283,9 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
                     }
@@ -282,7 +294,7 @@ class Widget: UIView {
                     placeHolders.grid[2][1].widget = self
                     panGesture.view?.center = CGPoint(x: columnOne, y: rowTwo)
                     self.ogPosition = CGPoint(x: placeHolders.grid[2][1].posX, y: placeHolders.grid[2][1].posY)
-                    self.ogCenter = CGPoint(x: placeHolders.grid[2][1].xC, y: placeHolders.grid[2][1].yC)
+                    self.ogCenter = CGPoint(x: columnOne, y: rowTwo)
                     placeHolders.updateFilled()
                 }
             // row 3 column 0
@@ -292,6 +304,9 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
                     }
@@ -300,7 +315,7 @@ class Widget: UIView {
                     placeHolders.grid[3][0].widget = self
                     panGesture.view?.center = CGPoint(x: columnZero, y: rowThree)
                     self.ogPosition = CGPoint(x: placeHolders.grid[3][0].posX, y: placeHolders.grid[3][0].posY)
-                    self.ogCenter = CGPoint(x: placeHolders.grid[3][0].xC, y: placeHolders.grid[3][0].yC)
+                    self.ogCenter = CGPoint(x: columnZero, y: rowThree)
                     placeHolders.updateFilled()
                 }
             // row 3 column 1
@@ -310,6 +325,9 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
                     }
@@ -318,7 +336,7 @@ class Widget: UIView {
                     placeHolders.grid[3][1].widget = self
                     panGesture.view?.center = CGPoint(x: columnOne, y: rowThree)
                     self.ogPosition = CGPoint(x: placeHolders.grid[3][1].posX, y: placeHolders.grid[3][1].posY)
-                    self.ogCenter = CGPoint(x: placeHolders.grid[3][1].xC, y: placeHolders.grid[3][1].yC)
+                    self.ogCenter = CGPoint(x: columnOne, y: rowThree)
                     placeHolders.updateFilled()
                 }
             } else if((abs(columnMiddle - Double(panGestureX)) > 197 || abs(middleY - Double(panGestureY)) > 376 )) && (translation.x == 0.0 && translation.y == 0.0) {
@@ -333,6 +351,9 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
                     }
@@ -342,7 +363,7 @@ class Widget: UIView {
                     panGesture.view?.center = CGPoint(x: columnMiddle, y: rowZero)
                     self.ogPosition = CGPoint(x: placeHolders.grid[0][0].posX, y: placeHolders.grid[0][0].posY)
                     self.ogCenter = CGPoint(x: columnMiddle, y: rowZero)
-                    placeHolders.updateFilled()
+                    //placeHolders.updateFilled()
                 }
             // row 1
             } else if(abs(columnMiddle - Double(panGestureX)) <= 197 && abs(rowOne - Double(panGestureY)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0) {
@@ -351,6 +372,9 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
                     }
@@ -360,7 +384,7 @@ class Widget: UIView {
                     panGesture.view?.center = CGPoint(x: columnMiddle, y: rowOne)
                     self.ogPosition = CGPoint(x: placeHolders.grid[1][0].posX, y: placeHolders.grid[1][0].posY)
                     self.ogCenter = CGPoint(x: columnMiddle, y: rowOne)
-                    placeHolders.updateFilled()
+                    //placeHolders.updateFilled()
                 }
             // row 2
             } else if(abs(columnMiddle - Double(panGestureX)) <= 197 && abs(rowTwo - Double(panGestureY)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0) {
@@ -369,6 +393,9 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
                     }
@@ -378,7 +405,7 @@ class Widget: UIView {
                     panGesture.view?.center = CGPoint(x: columnMiddle, y: rowTwo)
                     self.ogPosition = CGPoint(x: placeHolders.grid[2][0].posX, y: placeHolders.grid[2][0].posY)
                     self.ogCenter = CGPoint(x: columnMiddle, y: rowTwo)
-                    placeHolders.updateFilled()
+                    //placeHolders.updateFilled()
                 }
             // row 3
             } else if(abs(columnMiddle - Double(panGestureX)) <= 197 && abs(rowThree - Double(panGestureY)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0) {
@@ -387,6 +414,9 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
                     }
@@ -396,7 +426,7 @@ class Widget: UIView {
                     panGesture.view?.center = CGPoint(x: columnMiddle, y: rowThree)
                     self.ogPosition = CGPoint(x: placeHolders.grid[3][0].posX, y: placeHolders.grid[3][0].posY)
                     self.ogCenter = CGPoint(x: columnMiddle, y: rowThree)
-                    placeHolders.updateFilled()
+                    //placeHolders.updateFilled()
                 }
             } else if((abs(columnMiddle - Double(panGestureX)) > 197 || abs(middleY - Double(panGestureY)) > 376 )) && (translation.x == 0.0 && translation.y == 0.0) {
                 panGesture.view?.center = self.ogCenter
@@ -410,6 +440,9 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
                     }
@@ -419,7 +452,7 @@ class Widget: UIView {
                     panGesture.view?.center = CGPoint(x: columnMiddle, y: rowMiddleOne)
                     self.ogPosition = CGPoint(x: placeHolders.grid[0][0].posX, y: placeHolders.grid[0][0].posY)
                     self.ogCenter = CGPoint(x: columnMiddle, y: rowMiddleOne)
-                    placeHolders.updateFilled()
+                    //placeHolders.updateFilled()
                 }
             // row 2 and 3 AND column 0 and 1
             } else if(abs(columnMiddle - Double(panGestureX)) <= 197 && abs(rowMiddleTwo - Double(panGestureY)) <= 197 ) && (translation.x == 0.0 && translation.y == 0.0) {
@@ -428,6 +461,9 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     for (index, _) in self.placeHoldersAccessed.enumerated() {
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+                        
                         self.placeHoldersAccessed[index].filled = false
                         self.placeHoldersAccessed[index].widget = nil
                     }
@@ -437,7 +473,7 @@ class Widget: UIView {
                     panGesture.view?.center = CGPoint(x: columnMiddle, y: rowMiddleTwo)
                     self.ogPosition = CGPoint(x: placeHolders.grid[2][0].posX, y: placeHolders.grid[2][0].posY)
                     self.ogCenter = CGPoint(x: columnMiddle, y: rowMiddleTwo)
-                    placeHolders.updateFilled()
+                    //placeHolders.updateFilled()
                 }
             } else if((abs(columnMiddle - Double(panGestureX)) > 197 || abs(middleY - Double(panGestureY)) > 376 )) && (translation.x == 0.0 && translation.y == 0.0) {
                 panGesture.view?.center = self.ogCenter
