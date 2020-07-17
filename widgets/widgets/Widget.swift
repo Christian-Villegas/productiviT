@@ -50,34 +50,26 @@ class Widget: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //Delete Widget: At the click of a button located on the widget, removes the widget as well as clears it's access and empties the placeholders it was previously stored on.
     @objc func deleteWidget(sender: UIButton) {
+        //edit button must be on
         if editOn == false {return} // returns if not in edit mode
-        
+        //prompts user with alert
         let alert = UIAlertController(title: "Are you sure?", message: "Deleting this widget will also delete all of its data.", preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: {action in
             
-            let wCenter = self.center
-            outerLoop: for row in (0...3){
-                for column in (0...1){
-                    let phCenter = CGPoint(x: placeHolders.grid[row][column].xC, y: placeHolders.grid[row][column].yC)
-                        
-                    if wCenter == phCenter {
-                        placeHolders.grid[row][column].filled = false //update filled property
-                        break outerLoop
-                    }
-                }
-            }
-                
+            self.clearWPHA()
+            
             for i in (0...(screenWidgets.count-1)){
-                if screenWidgets[i] == self{
+                if(screenWidgets[i] == self) {
                     screenWidgets.remove(at: i) //remove from widget array
                     break
                 }
             }
             
             self.removeFromSuperview()
-        }))
+            }))
         
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
@@ -92,16 +84,47 @@ class Widget: UIView {
     @objc func changeSize(sender: UIButton) {
         if editOn == false {return} // returns if not in edit mode
         
-        if(self.size == 1 && self.center.x == 108.5) {
+        if(self.size == 1 && self.center.x == 108.5 && checkSizeAvailablility(start: self.placeHoldersAccessed[0], desiredSize: 2)) {
             self.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 374.0, height: 177.0)
+            
+            self.placeHoldersAccessed.append(placeHolders.grid[self.getPlaceHolder(number: self.placeHoldersAccessed[0].number + 1).row][self.getPlaceHolder(number: self.placeHoldersAccessed[0].number + 1).column])
+            placeHolders.grid[getPlaceHolder(number: self.placeHoldersAccessed[1].number).row][getPlaceHolder(number: self.placeHoldersAccessed[1].number).column].filled = true
+            placeHolders.grid[getPlaceHolder(number: self.placeHoldersAccessed[1].number).row][getPlaceHolder(number: self.placeHoldersAccessed[1].number).column].widget = self
+            let newX = self.calculateCoords(PHA: self.placeHoldersAccessed).x
+            let newY = self.calculateCoords(PHA: self.placeHoldersAccessed).y
+            self.ogCenter = CGPoint(x:newX, y:newY)
             self.size = 2
-        } else if(self.size == 2 && self.ogPosition.x == CGFloat(placeHolders.grid[0][0].posX)) {
+        } else if(self.size == 2 && self.ogPosition.x == CGFloat(placeHolders.grid[0][0].posX) && checkSizeAvailablility(start: self.placeHoldersAccessed[0], desiredSize: 3)){
+            
             self.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 374.0, height: 362.0)
+            self.placeHoldersAccessed.append(placeHolders.grid[self.getPlaceHolder(number: self.placeHoldersAccessed[0].number + 2).row][self.getPlaceHolder(number: self.placeHoldersAccessed[0].number + 2).column])
+            self.placeHoldersAccessed.append(placeHolders.grid[self.getPlaceHolder(number: self.placeHoldersAccessed[0].number + 3).row][self.getPlaceHolder(number: self.placeHoldersAccessed[0].number + 3).column])
+            
+            placeHolders.grid[getPlaceHolder(number: self.placeHoldersAccessed[1].number).row][getPlaceHolder(number: self.placeHoldersAccessed[1].number).column].filled = true
+            placeHolders.grid[getPlaceHolder(number: self.placeHoldersAccessed[1].number).row][getPlaceHolder(number: self.placeHoldersAccessed[1].number).column].widget = self
+            placeHolders.grid[getPlaceHolder(number: self.placeHoldersAccessed[2].number).row][getPlaceHolder(number: self.placeHoldersAccessed[2].number).column].filled = true
+            placeHolders.grid[getPlaceHolder(number: self.placeHoldersAccessed[2].number).row][getPlaceHolder(number: self.placeHoldersAccessed[2].number).column].widget = self
+            placeHolders.grid[getPlaceHolder(number: self.placeHoldersAccessed[3].number).row][getPlaceHolder(number: self.placeHoldersAccessed[3].number).column].filled = true
+            placeHolders.grid[getPlaceHolder(number: self.placeHoldersAccessed[3].number).row][getPlaceHolder(number: self.placeHoldersAccessed[3].number).column].widget = self
+            let newX = self.calculateCoords(PHA: self.placeHoldersAccessed).x
+            let newY = self.calculateCoords(PHA: self.placeHoldersAccessed).y
+            self.ogCenter = CGPoint(x:newX, y:newY)
             self.size = 3
         } else {
             self.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 177.0, height: 177.0)
+            
+           let temp = self.placeHoldersAccessed[0]
+            self.clearWPHA()
+            self.placeHoldersAccessed = [temp]
+            placeHolders.grid[getPlaceHolder(number: self.placeHoldersAccessed[0].number).row][getPlaceHolder(number: self.placeHoldersAccessed[0].number).column].filled = true
+            self.placeHoldersAccessed[0].filled = true
+            self.placeHoldersAccessed[0].widget = self
+            let newX = self.calculateCoords(PHA: self.placeHoldersAccessed).x
+            let newY = self.calculateCoords(PHA: self.placeHoldersAccessed).y
+            self.ogCenter = CGPoint(x:newX, y:newY)
             self.size = 1
         }
+        placeHolders.gridPrint()
     }
    
     func getPlaceHolder(number: Int) -> (row: Int, column: Int){
@@ -115,20 +138,46 @@ class Widget: UIView {
         return (0,0)
     }
     
-//    func checkSizeAvailablility(start: PlaceHolder, desiredSize: Int) -> Bool{
-//        let number = start.number
-//        if(size == 1) {
-//            if(getPlaceHolder(number: number + 1).filled == false){
-//                return true
-//            } else {return false}
-//        } else if(size == 2) {
-//            if(getPlaceHolder(number: number + 1).filled == true) && (getPlaceHolder(number: number + 2).filled == false) && (getPlaceHolder(number: number + 3).filled == false) {
-//                return true
-//            } else {return false}
-//        }
-//        
-//        return true
-//    }
+    func clearWPHA(){
+        for (index, _) in self.placeHoldersAccessed.enumerated() {
+            placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
+            placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
+            
+            self.placeHoldersAccessed[index].filled = false
+            self.placeHoldersAccessed[index].widget = nil
+        }
+    }
+    
+    func checkSizeAvailablility(start: PlaceHolder, desiredSize: Int) -> Bool{
+        let number = start.number
+        if(desiredSize == 2) {
+            if(placeHolders.grid[getPlaceHolder(number: number + 1).row][getPlaceHolder(number:number + 1).column].filled == false){
+                return true
+            } else {return false}
+        } else if(desiredSize == 3) {
+            if((placeHolders.grid[getPlaceHolder(number: number + 1).row][getPlaceHolder(number:number + 1).column].filled == true) && (placeHolders.grid[getPlaceHolder(number: number + 2).row][getPlaceHolder(number:number + 2).column].filled == false) && (placeHolders.grid[getPlaceHolder(number: number + 3).row][getPlaceHolder(number:number + 3).column].filled == false) && (number + 3) < 9) {
+                
+                return true
+            } else {return false}
+        }
+        return true
+    }
+    
+    func calculateCoords(PHA: [PlaceHolder]) -> (x: Double, y:Double){
+        var x = 0.0
+        var y = 0.0
+        var count = 1
+        for ph in PHA{
+            //print("The \(count) placeholder postion x is \(ph.posX) position y is \(ph.posY)")
+            x += ph.xC
+            y += ph.yC
+            count += 1
+        }
+        x /= Double(PHA.count)
+        y /= Double(PHA.count)
+        //print("Calculated x: \(x) Calculated y: \(y)")
+        return(x, y)
+    }
     
     @objc func panView(_ panGesture: UIPanGestureRecognizer) {
        
@@ -158,8 +207,10 @@ class Widget: UIView {
         let columnMiddle = (columnZero + columnOne)/2
         // the center y-coordinate between rows 0 and 1 and the center x-coordinate
         let rowMiddleOne = (rowZero + rowOne)/2
+        // the center y-coordinate between rows 1 and 2
+        let rowMiddleTwo = (rowOne + rowTwo)/2
         // the center y-coordinate between rows 2 and 3
-        let rowMiddleTwo = (rowTwo + rowThree)/2
+        let rowMiddleThree = (rowTwo + rowThree)/2
         // the center y-coordinate
         let middleY = (rowMiddleOne + rowMiddleOne)/2
         
@@ -177,13 +228,7 @@ class Widget: UIView {
                     panGesture.view?.center = self.ogCenter
                 } else {
                     // supposed to rewrite the array of placeHolders
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
+                    self.clearWPHA()
                     
                     self.placeHoldersAccessed = [placeHolders.grid[0][0]]
                     placeHolders.grid[0][0].widget = self
@@ -198,13 +243,7 @@ class Widget: UIView {
                 if(placeHolders.grid[0][1].filled == true) {
                     panGesture.view?.center = self.ogCenter
                 } else {
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
+                    self.clearWPHA()
 
                     self.placeHoldersAccessed = [placeHolders.grid[0][1]]
                     placeHolders.grid[0][1].widget = self
@@ -219,13 +258,7 @@ class Widget: UIView {
                 if(placeHolders.grid[1][0].filled == true) {
                     panGesture.view?.center = self.ogCenter
                 } else {
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
+                    self.clearWPHA()
 
                     self.placeHoldersAccessed = [placeHolders.grid[1][0]]
                     placeHolders.grid[1][0].widget = self
@@ -240,13 +273,7 @@ class Widget: UIView {
                 if(placeHolders.grid[1][1].filled == true) {
                     panGesture.view?.center = self.ogCenter
                 } else {
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
+                    self.clearWPHA()
 
                     self.placeHoldersAccessed = [placeHolders.grid[1][1]]
                     placeHolders.grid[1][1].widget = self
@@ -261,13 +288,7 @@ class Widget: UIView {
                 if(placeHolders.grid[2][0].filled == true) {
                     panGesture.view?.center = self.ogCenter
                 } else {
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
+                    self.clearWPHA()
 
                     self.placeHoldersAccessed = [placeHolders.grid[2][0]]
                     placeHolders.grid[2][0].widget = self
@@ -282,13 +303,7 @@ class Widget: UIView {
                 if(placeHolders.grid[2][1].filled == true) {
                     panGesture.view?.center = self.ogCenter
                 } else {
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
+                    self.clearWPHA()
 
                     self.placeHoldersAccessed = [placeHolders.grid[2][1]]
                     placeHolders.grid[2][1].widget = self
@@ -303,13 +318,7 @@ class Widget: UIView {
                 if(placeHolders.grid[3][0].filled == true) {
                     panGesture.view?.center = self.ogCenter
                 } else {
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
+                    self.clearWPHA()
                     
                     self.placeHoldersAccessed = [placeHolders.grid[3][0]]
                     placeHolders.grid[3][0].widget = self
@@ -324,13 +333,7 @@ class Widget: UIView {
                 if(placeHolders.grid[3][1].filled == true) {
                     panGesture.view?.center = self.ogCenter
                 } else {
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
+                    self.clearWPHA()
                     
                     self.placeHoldersAccessed = [placeHolders.grid[3][1]]
                     placeHolders.grid[3][1].widget = self
@@ -339,7 +342,7 @@ class Widget: UIView {
                     self.ogCenter = CGPoint(x: columnOne, y: rowThree)
                     placeHolders.updateFilled()
                 }
-            } else if((abs(columnMiddle - Double(panGestureX)) > 197 || abs(middleY - Double(panGestureY)) > 376 )) && (translation.x == 0.0 && translation.y == 0.0) {
+            } else if((abs(columnMiddle - Double(panGestureX)) > 197 || abs(middleY - Double(panGestureY)) > 200 )) && (translation.x == 0.0 && translation.y == 0.0) {
                 panGesture.view?.center = self.ogCenter
             }
         // END OF SIZE 1 //
@@ -350,20 +353,14 @@ class Widget: UIView {
                 if(placeHolders.grid[0][0].filled == true || placeHolders.grid[0][1].filled == true) {
                     panGesture.view?.center = self.ogCenter
                 } else {
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
+                    self.clearWPHA()
 
                     self.placeHoldersAccessed = [placeHolders.grid[0][0], placeHolders.grid[0][1]]
                     placeHolders.grid[0][0].widget = self
                     panGesture.view?.center = CGPoint(x: columnMiddle, y: rowZero)
                     self.ogPosition = CGPoint(x: placeHolders.grid[0][0].posX, y: placeHolders.grid[0][0].posY)
                     self.ogCenter = CGPoint(x: columnMiddle, y: rowZero)
-                    //placeHolders.updateFilled()
+                    placeHolders.updateFilled()
                 }
             // row 1
             } else if(abs(columnMiddle - Double(panGestureX)) <= 197 && abs(rowOne - Double(panGestureY)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0) {
@@ -371,20 +368,14 @@ class Widget: UIView {
                 if(placeHolders.grid[1][0].filled == true || placeHolders.grid[1][1].filled == true) {
                     panGesture.view?.center = self.ogCenter
                 } else {
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
+                    self.clearWPHA()
 
                     self.placeHoldersAccessed = [placeHolders.grid[1][0], placeHolders.grid[1][1]]
                     placeHolders.grid[1][0].widget = self
                     panGesture.view?.center = CGPoint(x: columnMiddle, y: rowOne)
                     self.ogPosition = CGPoint(x: placeHolders.grid[1][0].posX, y: placeHolders.grid[1][0].posY)
                     self.ogCenter = CGPoint(x: columnMiddle, y: rowOne)
-                    //placeHolders.updateFilled()
+                    placeHolders.updateFilled()
                 }
             // row 2
             } else if(abs(columnMiddle - Double(panGestureX)) <= 197 && abs(rowTwo - Double(panGestureY)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0) {
@@ -392,20 +383,14 @@ class Widget: UIView {
                 if(placeHolders.grid[2][0].filled == true || placeHolders.grid[2][1].filled == true) {
                     panGesture.view?.center = self.ogCenter
                 } else {
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
+                    self.clearWPHA()
 
                     self.placeHoldersAccessed = [placeHolders.grid[2][0], placeHolders.grid[2][1]]
                     placeHolders.grid[2][0].widget = self
                     panGesture.view?.center = CGPoint(x: columnMiddle, y: rowTwo)
                     self.ogPosition = CGPoint(x: placeHolders.grid[2][0].posX, y: placeHolders.grid[2][0].posY)
                     self.ogCenter = CGPoint(x: columnMiddle, y: rowTwo)
-                    //placeHolders.updateFilled()
+                    placeHolders.updateFilled()
                 }
             // row 3
             } else if(abs(columnMiddle - Double(panGestureX)) <= 197 && abs(rowThree - Double(panGestureY)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0) {
@@ -413,75 +398,71 @@ class Widget: UIView {
                 if(placeHolders.grid[3][0].filled == true || placeHolders.grid[3][1].filled == true) {
                     panGesture.view?.center = self.ogCenter
                 } else {
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
+                    self.clearWPHA()
                     
                     self.placeHoldersAccessed = [placeHolders.grid[3][0], placeHolders.grid[3][1]]
                     placeHolders.grid[3][0].widget = self
                     panGesture.view?.center = CGPoint(x: columnMiddle, y: rowThree)
                     self.ogPosition = CGPoint(x: placeHolders.grid[3][0].posX, y: placeHolders.grid[3][0].posY)
                     self.ogCenter = CGPoint(x: columnMiddle, y: rowThree)
-                    //placeHolders.updateFilled()
+                    placeHolders.updateFilled()
                 }
-            } else if((abs(columnMiddle - Double(panGestureX)) > 197 || abs(middleY - Double(panGestureY)) > 376 )) && (translation.x == 0.0 && translation.y == 0.0) {
+            } else if((abs(columnMiddle - Double(panGestureX)) > 197 || abs(middleY - Double(panGestureY)) > 200 )) && (translation.x == 0.0 && translation.y == 0.0) {
                 panGesture.view?.center = self.ogCenter
             }
         // END OF SIZE 2 //
         } else if(size == 3) {
             // row 0 and 1 AND column 0 and 1
-            if(abs(columnMiddle - Double(panGestureX)) <= 197 && abs(rowMiddleOne - Double(panGestureY)) <= 197 ) && (translation.x == 0.0 && translation.y == 0.0) {
-                
-                if(placeHolders.grid[0][0].filled == true || placeHolders.grid[0][1].filled == true || placeHolders.grid[1][0].filled == true || placeHolders.grid[1][1].filled == true) {
+            if(abs(columnMiddle - Double(panGestureX)) <= 197 && abs(rowZero - Double(panGestureY)) <= 197 ) && (translation.x == 0.0 && translation.y == 0.0) {
+                if((placeHolders.grid[0][0].filled == true || placeHolders.grid[0][1].filled == true) && (placeHolders.grid[1][0].filled == true || placeHolders.grid[1][1].filled == true)) {
                     panGesture.view?.center = self.ogCenter
                 } else {
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
-                    
+                    self.clearWPHA()
                     self.placeHoldersAccessed = [placeHolders.grid[0][0], placeHolders.grid[0][1], placeHolders.grid[1][0], placeHolders.grid[1][1]]
                     placeHolders.grid[0][0].widget = self
+ 
                     panGesture.view?.center = CGPoint(x: columnMiddle, y: rowMiddleOne)
                     self.ogPosition = CGPoint(x: placeHolders.grid[0][0].posX, y: placeHolders.grid[0][0].posY)
                     self.ogCenter = CGPoint(x: columnMiddle, y: rowMiddleOne)
-                    //placeHolders.updateFilled()
+                    placeHolders.updateFilled()
                 }
-            // row 2 and 3 AND column 0 and 1
-            } else if(abs(columnMiddle - Double(panGestureX)) <= 197 && abs(rowMiddleTwo - Double(panGestureY)) <= 197 ) && (translation.x == 0.0 && translation.y == 0.0) {
-                
-                if(placeHolders.grid[2][0].filled == true || placeHolders.grid[2][1].filled == true || placeHolders.grid[3][0].filled == true || placeHolders.grid[3][1].filled == true) {
+            // row 1 and 2 AND column 0 and 1
+            } else if(abs(columnMiddle - Double(panGestureX)) <= 197 && abs(rowOne - Double(panGestureY)) <= 197 ) && (translation.x == 0.0 && translation.y == 0.0) {
+                if((placeHolders.grid[1][0].filled == true || placeHolders.grid[1][1].filled == true) && (placeHolders.grid[2][0].filled == true || placeHolders.grid[2][1].filled == true)) {
                     panGesture.view?.center = self.ogCenter
                 } else {
-                    for (index, _) in self.placeHoldersAccessed.enumerated() {
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
-                        placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-                        
-                        self.placeHoldersAccessed[index].filled = false
-                        self.placeHoldersAccessed[index].widget = nil
-                    }
+                    self.clearWPHA()
+                    
+                    self.placeHoldersAccessed = [placeHolders.grid[1][0], placeHolders.grid[1][1], placeHolders.grid[2][0], placeHolders.grid[2][1]]
+                    placeHolders.grid[1][0].widget = self
+       
+                    panGesture.view?.center = CGPoint(x: columnMiddle, y: rowMiddleTwo)
+                    self.ogPosition = CGPoint(x: placeHolders.grid[1][0].posX, y: placeHolders.grid[1][0].posY)
+                    self.ogCenter = CGPoint(x: columnMiddle, y: rowMiddleTwo)
+                    placeHolders.updateFilled()
+                }
+            // row 2 and 3 AND column 0 and 1
+            } else if(abs(columnMiddle - Double(panGestureX)) <= 197 && abs(rowTwo - Double(panGestureY)) <= 197 ) && (translation.x == 0.0 && translation.y == 0.0) {
+                if((placeHolders.grid[2][0].filled == true || placeHolders.grid[2][1].filled == true) && (placeHolders.grid[3][0].filled == true || placeHolders.grid[3][1].filled == true)) {
+                    panGesture.view?.center = self.ogCenter
+                } else {
+                    self.clearWPHA()
                     
                     self.placeHoldersAccessed = [placeHolders.grid[2][0], placeHolders.grid[2][1], placeHolders.grid[3][0], placeHolders.grid[3][1]]
                     placeHolders.grid[2][0].widget = self
-                    panGesture.view?.center = CGPoint(x: columnMiddle, y: rowMiddleTwo)
+          
+                    panGesture.view?.center = CGPoint(x: columnMiddle, y: rowMiddleThree)
                     self.ogPosition = CGPoint(x: placeHolders.grid[2][0].posX, y: placeHolders.grid[2][0].posY)
-                    self.ogCenter = CGPoint(x: columnMiddle, y: rowMiddleTwo)
-                    //placeHolders.updateFilled()
+                    self.ogCenter = CGPoint(x: columnMiddle, y: rowMiddleThree)
+                    placeHolders.updateFilled()
                 }
-            } else if((abs(columnMiddle - Double(panGestureX)) > 197 || abs(middleY - Double(panGestureY)) > 376 )) && (translation.x == 0.0 && translation.y == 0.0) {
+            } else if((abs(columnMiddle - Double(panGestureX)) > 197 || abs(middleY - Double(panGestureY)) > 200 )) && (translation.x == 0.0 && translation.y == 0.0) {
                 panGesture.view?.center = self.ogCenter
             }
         } // END OF SIZE 3 //
     }
-    
-    
+
+
     
     //Data Members://
     var title: String

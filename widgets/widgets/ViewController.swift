@@ -155,21 +155,8 @@ class ViewController: UIViewController {
             let newWidget = Widget(frame: CGRect(x: posX, y: posY, width: 177, height: 177))
             
             // will find the next empty space and change the center of the new widget to that one
-            //placeNextWidget(PHA: &placeHolders.grid, addedWidget: newWidget)
-            OuterLoop: for row in (0...3){
-                for column in (0...1){
-                    if(placeHolders.grid[row][column].filled == false) {
-                        newWidget.center = CGPoint(x: placeHolders.grid[row][column].xC, y: placeHolders.grid[row][column].yC)
-                        newWidget.ogPosition = CGPoint(x: placeHolders.grid[row][column].posX, y: placeHolders.grid[row][column].posY)
-                        placeHolders.grid[row][column].filled = true
-                        newWidget.ogCenter = newWidget.center
-                        // puts the widget to the array of placeHolders it takes
-                        newWidget.placeHoldersAccessed.append(placeHolders.grid[row][column])
-                        placeHolders.grid[row][column].widget = newWidget
-                        break OuterLoop
-                    }
-                }
-            }
+           placeNextWidget(PHA: &placeHolders.grid, addedWidget: newWidget)
+            placeHolders.gridPrint()
             self.view.insertSubview(newWidget, belowSubview: widgetMenu)
             screenWidgets.append(newWidget)
         }
@@ -192,17 +179,16 @@ class ViewController: UIViewController {
         }
     }
     
-    
     @IBAction func addSmartGoals(_ sender: UIButton) {
-        if editOn == false{return}
-        
-        let smartWidget = SmartGoal(frame: CGRect(x: centerX, y: centerY, width: 177, height: 177))
-        self.view.insertSubview(smartWidget, belowSubview: widgetMenu)
-        screenWidgets.append(smartWidget)
-        print(screenWidgets.count)
-        
-        centerX += 50
-        centerY += 50
+            if editOn == false{return}
+            
+            let smartWidget = SmartGoal(frame: CGRect(x: centerX, y: centerY, width: 177, height: 177))
+            self.view.insertSubview(smartWidget, belowSubview: widgetMenu)
+            screenWidgets.append(smartWidget)
+            print(screenWidgets.count)
+            
+            centerX += 50
+            centerY += 50
     }
     
     @objc func editHome(sender: UIButton!) {
@@ -283,5 +269,3 @@ class ViewController: UIViewController {
     
 
 }
-
-
