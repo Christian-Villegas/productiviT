@@ -125,13 +125,13 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         if editingStyle == .delete {
             if (self.itemArray.count - 1) > 0
             {
-                self.itemArray.remove(at: itemArray.count - 1)
+                self.itemArray.remove(at: indexPath.row)
                 //self.label.text  = self.itemArray[self.itemArray.count - 1]
                 self.defaults.set(self.itemArray, forKey: "ToDoListArray")
             }
             else{
                 //self.label.text  = "Add Task"
-                if itemArray.count > 0 {self.itemArray.remove(at: itemArray.count - 1)}
+                if itemArray.count > 0 {self.itemArray.remove(at: indexPath.row)}
                 self.defaults.set(self.itemArray, forKey: "ToDoListArray")
 
             }
