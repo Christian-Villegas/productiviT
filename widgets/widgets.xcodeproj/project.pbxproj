@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6E04B5DB24AD42F4004E8AD2 /* SmartGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E04B5DA24AD42F4004E8AD2 /* SmartGoal.swift */; };
-		6E0D1DD724B65938005B0080 /* ToDoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0D1DD624B65938005B0080 /* ToDoWidget.swift */; };
-		6E62D74E24BBB9EC000677EC /* slideUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E62D74D24BBB9EC000677EC /* slideUpVC.swift */; };
 		6EED171824A1BF8000C8AF96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EED171724A1BF8000C8AF96 /* AppDelegate.swift */; };
 		6EED171A24A1BF8000C8AF96 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EED171924A1BF8000C8AF96 /* SceneDelegate.swift */; };
 		6EED171C24A1BF8000C8AF96 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EED171B24A1BF8000C8AF96 /* ViewController.swift */; };
@@ -17,12 +15,12 @@
 		6EED172124A1BF8400C8AF96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EED172024A1BF8400C8AF96 /* Assets.xcassets */; };
 		6EED172424A1BF8400C8AF96 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EED172224A1BF8400C8AF96 /* LaunchScreen.storyboard */; };
 		6EF9B8C524AAE4220077D7AB /* Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF9B8C424AAE4220077D7AB /* Widget.swift */; };
+		86E773D724C27E0C00A81400 /* ToDoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E773D624C27E0C00A81400 /* ToDoWidget.swift */; };
+		86E773D924C2819200A81400 /* slideUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E773D824C2819200A81400 /* slideUpVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6E04B5DA24AD42F4004E8AD2 /* SmartGoal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartGoal.swift; sourceTree = "<group>"; };
-		6E0D1DD624B65938005B0080 /* ToDoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoWidget.swift; sourceTree = "<group>"; };
-		6E62D74D24BBB9EC000677EC /* slideUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = slideUpVC.swift; sourceTree = "<group>"; };
 		6EED171424A1BF8000C8AF96 /* widgets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = widgets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EED171724A1BF8000C8AF96 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6EED171924A1BF8000C8AF96 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -32,6 +30,8 @@
 		6EED172324A1BF8400C8AF96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6EED172524A1BF8400C8AF96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6EF9B8C424AAE4220077D7AB /* Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Widget.swift; sourceTree = "<group>"; };
+		86E773D624C27E0C00A81400 /* ToDoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoWidget.swift; sourceTree = "<group>"; };
+		86E773D824C2819200A81400 /* slideUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = slideUpVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +48,8 @@
 		6EED170B24A1BF8000C8AF96 = {
 			isa = PBXGroup;
 			children = (
+				86E773D624C27E0C00A81400 /* ToDoWidget.swift */,
+				86E773D824C2819200A81400 /* slideUpVC.swift */,
 				6EED171624A1BF8000C8AF96 /* widgets */,
 				6EED171524A1BF8000C8AF96 /* Products */,
 			);
@@ -67,8 +69,6 @@
 				6EED171724A1BF8000C8AF96 /* AppDelegate.swift */,
 				6EED171924A1BF8000C8AF96 /* SceneDelegate.swift */,
 				6EED171B24A1BF8000C8AF96 /* ViewController.swift */,
-				6E62D74D24BBB9EC000677EC /* slideUpVC.swift */,
-				6E0D1DD624B65938005B0080 /* ToDoWidget.swift */,
 				6EED171D24A1BF8000C8AF96 /* Main.storyboard */,
 				6E04B5DA24AD42F4004E8AD2 /* SmartGoal.swift */,
 				6EF9B8C424AAE4220077D7AB /* Widget.swift */,
@@ -152,9 +152,9 @@
 			files = (
 				6EED171C24A1BF8000C8AF96 /* ViewController.swift in Sources */,
 				6E04B5DB24AD42F4004E8AD2 /* SmartGoal.swift in Sources */,
-				6E62D74E24BBB9EC000677EC /* slideUpVC.swift in Sources */,
+				86E773D924C2819200A81400 /* slideUpVC.swift in Sources */,
 				6EED171824A1BF8000C8AF96 /* AppDelegate.swift in Sources */,
-				6E0D1DD724B65938005B0080 /* ToDoWidget.swift in Sources */,
+				86E773D724C27E0C00A81400 /* ToDoWidget.swift in Sources */,
 				6EED171A24A1BF8000C8AF96 /* SceneDelegate.swift in Sources */,
 				6EF9B8C524AAE4220077D7AB /* Widget.swift in Sources */,
 			);
@@ -300,7 +300,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JZCLMW54F5;
 				INFOPLIST_FILE = widgets/Info.plist;
@@ -310,7 +309,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.christophercordero.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

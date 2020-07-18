@@ -5,7 +5,6 @@
 //  Created by Christopher Cordero on 7/12/20.
 //  Copyright © 2020 Christopher Cordero. All rights reserved.
 //
-
 import UIKit
 
 var currentWidget = 0

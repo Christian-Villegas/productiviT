@@ -20,14 +20,14 @@ class SmartGoal: Widget, UITextFieldDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+                
         
         let label = UILabel(frame: CGRect(x: 10, y: 10, width: 200, height: 21))
         //label.center = CGPoint(x: 15, y: 15)
         label.textAlignment = .left
         label.text = "SMART Goals"
         self.addSubview(label)
-        
+    
         
         
         /* Text field code
