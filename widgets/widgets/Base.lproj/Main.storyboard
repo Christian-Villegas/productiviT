@@ -24,7 +24,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="addSmartGoals:" destination="BYZ-38-t0r" eventType="touchUpInside" id="N4c-QZ-afm"/>
+                                    <action selector="addToDo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ob8-xy-AxL"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PKK-ur-7VY">
@@ -73,6 +73,33 @@
                 </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="931.88405797101461" y="-227.00892857142856"/>
+        </scene>
+        <!--Slide UpVC-->
+        <scene sceneID="bcM-5u-SKm">
+            <objects>
+                <viewController id="fyd-LY-nlC" customClass="slideUpVC" customModule="widgets" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Znm-1q-XGV">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YzO-QS-xYc">
+                                <rect key="frame" x="112" y="20" width="191" height="46"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="40"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="5Hb-tm-z0R"/>
+                    </view>
+                    <connections>
+                        <outlet property="topTitle" destination="YzO-QS-xYc" id="LUK-YN-3fv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rdM-0F-fYh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="932" y="-899"/>
         </scene>
         <!--Group-->
         <scene sceneID="fzV-wP-k28">
@@ -142,6 +169,7 @@
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="EOh-PW-PKs"/>
                         <segue destination="EvZ-1x-XXq" kind="relationship" relationship="viewControllers" id="ZsX-Fz-mjC"/>
                         <segue destination="Uyg-aA-yfi" kind="relationship" relationship="viewControllers" id="Dl0-Kv-c8G"/>
+                        <segue destination="fyd-LY-nlC" kind="showDetail" identifier="showDetail" id="uE9-EP-Ywe"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hcv-hY-Xs5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

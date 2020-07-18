@@ -30,6 +30,7 @@ struct PlaceHolder {
             self.posX = 217
             self.xC = 305.5
         }
+
         self.posY = 44 + Double(row * 185)
         self.yC = 132.5 + Double(row * 185)
         self.frame = CGRect(x: self.posX, y: self.posY, width: 177, height: 177)
@@ -86,7 +87,7 @@ struct placeHolderArray {
                         self.grid[row][column].filled = true
                         self.grid[row][column+1].filled = true
                     }
-                    //if row is less than or equal to 2
+                    
                     if(row <= 2) {
                         if(self.grid[row][column].widget != nil && self.grid[row][column].widget?.size == 3) {
                             self.grid[row][column].filled = true
@@ -131,6 +132,8 @@ public var editOn = false
 // holds all widgets
 var screenWidgets: [Widget] = []
 var placeHolders = placeHolderArray()
+var taskW = ToDoWidget()
+
 
 
 class ViewController: UIViewController {
@@ -154,7 +157,7 @@ class ViewController: UIViewController {
             let newWidget = Widget(frame: CGRect(x: posX, y: posY, width: 177, height: 177))
             
             // will find the next empty space and change the center of the new widget to that one
-            placeNextWidget(PHA: &placeHolders.grid, addedWidget: newWidget)
+           placeNextWidget(PHA: &placeHolders.grid, addedWidget: newWidget)
             placeHolders.gridPrint()
             self.view.insertSubview(newWidget, belowSubview: widgetMenu)
             screenWidgets.append(newWidget)
@@ -178,17 +181,18 @@ class ViewController: UIViewController {
         }
     }
     
-    
-    @IBAction func addSmartGoals(_ sender: UIButton) {
+    @IBAction func addToDo(_ sender: UIButton) {
         if editOn == false{return}
-        
-        let smartWidget = SmartGoal(frame: CGRect(x: centerX, y: centerY, width: 177, height: 177))
-        self.view.insertSubview(smartWidget, belowSubview: widgetMenu)
-        screenWidgets.append(smartWidget)
-        print(screenWidgets.count)
-        
-        centerX += 50
-        centerY += 50
+         if self.hasNextSpot() {
+            let toDoWidget = ToDoWidget(frame: CGRect(x: 0.0, y: 0.0, width: 177, height: 177))
+            self.view.insertSubview(toDoWidget, belowSubview: widgetMenu)
+            screenWidgets.append(toDoWidget)
+            taskW = toDoWidget
+            placeNextWidget(PHA: &placeHolders.grid, addedWidget: toDoWidget)
+            self.view.insertSubview(toDoWidget, belowSubview: widgetMenu)
+            screenWidgets.append(toDoWidget)
+        }
+        //self.view.addSubview(newWidget)
     }
     
     @objc func editHome(sender: UIButton!) {
@@ -202,6 +206,10 @@ class ViewController: UIViewController {
                 for i in 0...(screenWidgets.count-1) {
                     screenWidgets[i].delButton.isHidden = false
                     screenWidgets[i].sizeButton.isHidden = false
+                    if screenWidgets[i].number == 1 {
+                        let tdW = screenWidgets[i] as! ToDoWidget
+                        tdW.addTask.isHidden = true
+                    }
                 }
             }
         }
@@ -216,6 +224,10 @@ class ViewController: UIViewController {
                 for i in 0...(screenWidgets.count-1) {
                     screenWidgets[i].delButton.isHidden = true
                     screenWidgets[i].sizeButton.isHidden = true
+                    if screenWidgets[i].number == 1 {
+                        let tdW = screenWidgets[i] as! ToDoWidget
+                        tdW.addTask.isHidden = false
+                    }
                 }
             }
         }
@@ -269,5 +281,3 @@ class ViewController: UIViewController {
     
 
 }
-
-
