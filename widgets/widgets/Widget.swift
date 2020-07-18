@@ -35,10 +35,13 @@ class Widget: UIView {
         self.backgroundColor = UIColor(red: 0.789, green: 0.789, blue: 0.789, alpha: 1)
         self.layer.cornerRadius = 20
         self.layer.masksToBounds = true
+        
         let image = UIImage(named: "icons8-enlarge-30")
         sizeButton.setImage(image?.withTintColor(.white), for: .normal)
+        
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panView))
         self.addGestureRecognizer(panGesture)
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
         tap.numberOfTapsRequired = 2
         self.addGestureRecognizer(tap)
@@ -66,6 +69,7 @@ class Widget: UIView {
                    topController = presentedViewController
                }
                currentWidget = self.number
+                print(self.number)
                topController.performSegue(withIdentifier: "showDetail", sender: nil)
            }
        }
@@ -486,7 +490,7 @@ class Widget: UIView {
     
     //Data Members://
     let delButton = UIButton(frame: CGRect(x: 135, y: 4, width: 40.0, height: 40.0))
-    let sizeButton = UIButton(frame: CGRect(x: 20.0, y: 20.0, width: 100.0, height: 40.0))
+    let sizeButton = UIButton(frame: CGRect(x: 140.0, y: 140.0, width: 30.0, height: 30.0))
     let fullView = UIView(frame: CGRect(x: 0, y: 74, width: 414.0, height: 746.0))
     var ogPosition: CGPoint
     var ogCenter: CGPoint

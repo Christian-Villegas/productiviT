@@ -30,8 +30,8 @@
 		6EED172324A1BF8400C8AF96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6EED172524A1BF8400C8AF96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6EF9B8C424AAE4220077D7AB /* Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Widget.swift; sourceTree = "<group>"; };
-		86E773D624C27E0C00A81400 /* ToDoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoWidget.swift; sourceTree = "<group>"; };
-		86E773D824C2819200A81400 /* slideUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = slideUpVC.swift; sourceTree = "<group>"; };
+		86E773D624C27E0C00A81400 /* ToDoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ToDoWidget.swift; path = ../ToDoWidget.swift; sourceTree = "<group>"; };
+		86E773D824C2819200A81400 /* slideUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = slideUpVC.swift; path = ../slideUpVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,8 +48,6 @@
 		6EED170B24A1BF8000C8AF96 = {
 			isa = PBXGroup;
 			children = (
-				86E773D624C27E0C00A81400 /* ToDoWidget.swift */,
-				86E773D824C2819200A81400 /* slideUpVC.swift */,
 				6EED171624A1BF8000C8AF96 /* widgets */,
 				6EED171524A1BF8000C8AF96 /* Products */,
 			);
@@ -66,6 +64,8 @@
 		6EED171624A1BF8000C8AF96 /* widgets */ = {
 			isa = PBXGroup;
 			children = (
+				86E773D624C27E0C00A81400 /* ToDoWidget.swift */,
+				86E773D824C2819200A81400 /* slideUpVC.swift */,
 				6EED171724A1BF8000C8AF96 /* AppDelegate.swift */,
 				6EED171924A1BF8000C8AF96 /* SceneDelegate.swift */,
 				6EED171B24A1BF8000C8AF96 /* ViewController.swift */,
