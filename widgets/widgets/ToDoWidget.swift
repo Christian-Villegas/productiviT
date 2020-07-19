@@ -18,6 +18,8 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         super.init(frame: frame)
        
        
+    
+    
         self.number = 1//number assigned to ToDo widgets, for checking which widget to display when full view is requested
         self.label.text = "To Do List"//widget will display this when first added
        
@@ -34,7 +36,7 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         addTask.isHidden = true
        
         //Initializations for addTask button on full view
-        fullViewAddTask.frame = CGRect(x: 172, y: 670, width: 70, height: 70)
+        fullViewAddTask.frame = CGRect(x: 320, y: 670, width: 70, height: 70)
         fullViewAddTask.layer.cornerRadius = 0.5 * fullViewAddTask.bounds.size.width
         fullViewAddTask.clipsToBounds = true
         fullViewAddTask.backgroundColor = .blue
@@ -64,8 +66,7 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         miniTable.delegate = self
         miniTable.dataSource = self
         miniTable.estimatedRowHeight = 100
-        miniTable.rowHeight = UITableView.automaticDimension
-
+        //miniTable.rowHeight = UITableView.automaticDimension
         miniTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     
         //constraining Label
@@ -81,7 +82,7 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
        
         //add components to subview
         self.addSubview(label)
-        self.insertSubview(miniTable, belowSubview: delButton)
+    self.insertSubview(miniTable, belowSubview: self.shield)
         //self.addSubview(remove)
         self.addSubview(addTask)
         
@@ -102,14 +103,18 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         return itemArray.count
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension //Choose your custom row height
+        return UITableView.automaticDimension
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.backgroundColor = .none
         cell.textLabel?.text = itemArray[indexPath.row]
-        cell.textLabel?.font = UIFont(name: "HelveticaNeue-Thin", size:20)
-        cell.textLabel?.adjustsFontForContentSizeCategory = true
+        cell.textLabel?.font = UIFont(name: "HelveticaNeue-Thin", size:30)
+        cell.textLabel?.numberOfLines=0
+        cell.textLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
+        cell.textLabel?.minimumScaleFactor = 0.2
+        //cell.textLabel?.adjustsFontForContentSizeCategory = true
         return cell
     }
 
@@ -158,10 +163,13 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         switch self.size {
         case 1:
             miniTable.frame = CGRect(x: 0, y: 3, width: 172, height: 130)
+            shield.frame = CGRect(x: 0, y: 0, width: 177, height: 177)
         case 2:
             miniTable.frame = CGRect(x: 0, y: 3, width: 369, height: 130)
+            shield.frame = CGRect(x: 0, y: 0, width: 374, height: 177)
         case 3:
             miniTable.frame = CGRect(x: 0, y: 3, width: 369, height: 318)
+            shield.frame = CGRect(x: 0, y: 0, width: 374, height: 362)
         default:
             miniTable.frame = CGRect(x: 0, y: 3, width: 172, height: 130)
         }

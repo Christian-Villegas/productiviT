@@ -47,15 +47,18 @@ class Widget: UIView {
         self.addGestureRecognizer(tap)
         
         
-        
         sizeButton.addTarget(self, action: #selector(changeSize), for: .touchUpInside)
-        self.addSubview(sizeButton)
+        
         
         delButton.setTitle("x", for: .normal)
         delButton.setTitleColor(.red, for: .normal)
         delButton.autoresizingMask = [.flexibleLeftMargin, .flexibleBottomMargin]
         delButton.addTarget(self, action: #selector(deleteWidget), for: .touchUpInside)
+        
+        
+        self.addSubview(self.shield)
         self.addSubview(delButton)
+        self.addSubview(sizeButton)
     }
     
     required init?(coder: NSCoder) {
@@ -93,6 +96,7 @@ class Widget: UIView {
                     break
                 }
             }
+            //print(screenWidgets.count)
             
             self.removeFromSuperview()
             }))
@@ -505,6 +509,7 @@ class Widget: UIView {
     var size: Int
     var placeHoldersAccessed: Array<PlaceHolder>
     var number: Int
+    let shield = UIView(frame: CGRect(x: 0, y: 0, width: 177, height: 177))
     
 
 }

@@ -142,9 +142,11 @@ class ViewController: UIViewController {
     var centerY = 0
     
     let editButton = UIButton(type: .system) // let preferred over var here
-    let addWidgetButton = UIButton(type: .system)
 
-    @IBOutlet weak var widgetMenu: UITableView!
+    @IBOutlet weak var emptyMessage: UILabel!
+    @IBOutlet weak var parentButton: UIButton!
+    @IBOutlet weak var toDoButton: UIButton!
+    
     
     @IBAction func addWidget(_ sender: UIButton) {
         // the edit button
@@ -159,8 +161,9 @@ class ViewController: UIViewController {
             // will find the next empty space and change the center of the new widget to that one
            placeNextWidget(PHA: &placeHolders.grid, addedWidget: newWidget)
             placeHolders.gridPrint()
-            self.view.insertSubview(newWidget, belowSubview: widgetMenu)
+            self.view.addSubview(newWidget)
             screenWidgets.append(newWidget)
+            emptyMessage.isHidden = true
         }
     }
     
@@ -185,12 +188,11 @@ class ViewController: UIViewController {
         if editOn == false{return}
          if self.hasNextSpot() {
             let toDoWidget = ToDoWidget(frame: CGRect(x: 0.0, y: 0.0, width: 177, height: 177))
-            self.view.insertSubview(toDoWidget, belowSubview: widgetMenu)
+            self.view.addSubview(toDoWidget)
             screenWidgets.append(toDoWidget)
             taskW = toDoWidget
             placeNextWidget(PHA: &placeHolders.grid, addedWidget: toDoWidget)
-            self.view.insertSubview(toDoWidget, belowSubview: widgetMenu)
-            screenWidgets.append(toDoWidget)
+            emptyMessage.isHidden = true
         }
         //self.view.addSubview(newWidget)
     }
@@ -200,12 +202,13 @@ class ViewController: UIViewController {
         else {editOn = false}
         if editOn == true {
             editButton.setTitle("done", for: .normal)
-            addWidgetButton.isHidden = false
-            
+            parentButton.isHidden = false
+            toDoButton.isHidden = false
             if screenWidgets.count > 0{
                 for i in 0...(screenWidgets.count-1) {
                     screenWidgets[i].delButton.isHidden = false
                     screenWidgets[i].sizeButton.isHidden = false
+                    screenWidgets[i].shield.isHidden = false
                     if screenWidgets[i].number == 1 {
                         let tdW = screenWidgets[i] as! ToDoWidget
                         tdW.addTask.isHidden = true
@@ -215,36 +218,27 @@ class ViewController: UIViewController {
         }
         else {
             editButton.setTitle("edit", for: .normal)
-            addWidgetButton.isHidden = true
-            widgetMenu.isHidden = true
-            addWidgetButton.isHidden = true
-            addWidgetButton.setTitle("+", for: .normal)
-            addWidgetButton.frame = CGRect(x: 20, y: 44, width: 40, height: 25)
+            parentButton.isHidden = true
+            toDoButton.isHidden = true
             if screenWidgets.count > 0{
                 for i in 0...(screenWidgets.count-1) {
                     screenWidgets[i].delButton.isHidden = true
                     screenWidgets[i].sizeButton.isHidden = true
+                    screenWidgets[i].shield.isHidden = true
+                    
                     if screenWidgets[i].number == 1 {
                         let tdW = screenWidgets[i] as! ToDoWidget
                         tdW.addTask.isHidden = false
                     }
                 }
+                
+            }
+            else{
+                emptyMessage.isHidden = false
             }
         }
     }
     
-    @objc func plusButton(sender: UIButton!) {
-        if widgetMenu.isHidden == true {
-            widgetMenu.isHidden = false
-            addWidgetButton.setTitle("close", for: .normal)
-            addWidgetButton.frame = CGRect(x: 263, y: 44, width: 40, height: 25)
-        }
-        else{
-            widgetMenu.isHidden = true
-            addWidgetButton.setTitle("+", for: .normal)
-            addWidgetButton.frame = CGRect(x: 20, y: 44, width: 40, height: 25)
-        }
-    }
     
     func hasNextSpot() -> Bool{
         for row in (0...3){
@@ -268,14 +262,10 @@ class ViewController: UIViewController {
         editButton.contentHorizontalAlignment = .right
         editButton.addTarget(self, action: #selector(self.editHome), for: UIControl.Event.touchUpInside)
         self.view.addSubview(editButton)
-        widgetMenu.frame = CGRect(x: 0, y: 44, width: 259, height: 769)
-        widgetMenu.isHidden = true
-        addWidgetButton.setTitle("+", for: .normal)
-        addWidgetButton.frame = CGRect(x: 20, y: 44, width: 40, height: 25)
         editButton.contentHorizontalAlignment = .left
-        addWidgetButton.addTarget(self, action: #selector(self.plusButton), for: UIControl.Event.touchUpInside)
-        addWidgetButton.isHidden = true
-        self.view.addSubview(addWidgetButton)
+        parentButton.isHidden = true
+        toDoButton.isHidden = true
+        
     }
     
     
