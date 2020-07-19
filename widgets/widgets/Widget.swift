@@ -38,6 +38,7 @@ class Widget: UIView {
         
         let image = UIImage(named: "icons8-enlarge-30")
         sizeButton.setImage(image?.withTintColor(.white), for: .normal)
+        sizeButton.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panView))
         self.addGestureRecognizer(panGesture)
@@ -53,6 +54,7 @@ class Widget: UIView {
         
         delButton.setTitle("x", for: .normal)
         delButton.setTitleColor(.red, for: .normal)
+        delButton.autoresizingMask = [.flexibleLeftMargin, .flexibleBottomMargin]
         delButton.addTarget(self, action: #selector(deleteWidget), for: .touchUpInside)
         self.addSubview(delButton)
     }
@@ -106,6 +108,9 @@ class Widget: UIView {
         }
     }
     
+    func updateView(){
+    }
+    
     @objc func changeSize(sender: UIButton) {
         if editOn == false {return} // returns if not in edit mode
         
@@ -119,6 +124,7 @@ class Widget: UIView {
             let newY = self.calculateCoords(PHA: self.placeHoldersAccessed).y
             self.ogCenter = CGPoint(x:newX, y:newY)
             self.size = 2
+            updateView()
         } else if(self.size == 2 && self.ogPosition.x == CGFloat(placeHolders.grid[0][0].posX) && checkSizeAvailablility(start: self.placeHoldersAccessed[0], desiredSize: 3)){
             
             self.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 374.0, height: 362.0)
@@ -135,6 +141,7 @@ class Widget: UIView {
             let newY = self.calculateCoords(PHA: self.placeHoldersAccessed).y
             self.ogCenter = CGPoint(x:newX, y:newY)
             self.size = 3
+            updateView()
         } else {
             self.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 177.0, height: 177.0)
             
@@ -148,6 +155,7 @@ class Widget: UIView {
             let newY = self.calculateCoords(PHA: self.placeHoldersAccessed).y
             self.ogCenter = CGPoint(x:newX, y:newY)
             self.size = 1
+            updateView()
         }
         placeHolders.gridPrint()
     }

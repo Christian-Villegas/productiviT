@@ -13,7 +13,7 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
     //custom constructor
    override init(frame: CGRect) {
         taskList = UITableView(frame: CGRect(x: 0, y: 0, width: 414, height: 800), style: .plain)
-        miniTable = UITableView(frame: CGRect(x: 0, y: 10, width: 172, height: 130), style: .plain)
+        miniTable = UITableView(frame: CGRect(x: 0, y: 3, width: 172, height: 130), style: .plain)
         
         super.init(frame: frame)
        
@@ -23,6 +23,7 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
        
         //Initializations for addTask button
         addTask.frame = CGRect(x: 135, y: 135, width: 35, height: 35)
+        addTask.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
         addTask.layer.cornerRadius = 0.5 * addTask.bounds.size.width
         addTask.clipsToBounds = true
         addTask.backgroundColor = .blue
@@ -66,6 +67,11 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         miniTable.rowHeight = UITableView.automaticDimension
 
         miniTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+    
+        //constraining Label
+        self.label.autoresizingMask = [.flexibleRightMargin, .flexibleTopMargin]
+    
+    
         
        
         //adding to UIView displayed on the slide up full view mode
@@ -147,7 +153,19 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
     }
     
 //
-    
+    //Method for updating view to size
+    override func updateView() {
+        switch self.size {
+        case 1:
+            miniTable.frame = CGRect(x: 0, y: 3, width: 172, height: 130)
+        case 2:
+            miniTable.frame = CGRect(x: 0, y: 3, width: 369, height: 130)
+        case 3:
+            miniTable.frame = CGRect(x: 0, y: 3, width: 369, height: 318)
+        default:
+            miniTable.frame = CGRect(x: 0, y: 3, width: 172, height: 130)
+        }
+    }
     
     //Method for adding a task
     @objc func addButton(_ sender: UIButton!) {
