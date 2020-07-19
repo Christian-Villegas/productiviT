@@ -30,7 +30,6 @@ class Widget: UIView {
         self.placeHoldersAccessed = []
         
         super.init(frame: frame)
-        self.backgroundColor = .lightGray
         self.alpha = 1
         self.backgroundColor = UIColor(red: 0.789, green: 0.789, blue: 0.789, alpha: 1)
         self.layer.cornerRadius = 20
