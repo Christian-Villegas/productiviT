@@ -30,6 +30,7 @@ class Widget: UIView {
         self.placeHoldersAccessed = []
         
         super.init(frame: frame)
+        self.backgroundColor = .lightGray
         self.alpha = 1
         self.backgroundColor = UIColor(red: 0.789, green: 0.789, blue: 0.789, alpha: 1)
         self.layer.cornerRadius = 20
@@ -37,7 +38,6 @@ class Widget: UIView {
         
         let image = UIImage(named: "icons8-enlarge-30")
         sizeButton.setImage(image?.withTintColor(.white), for: .normal)
-        sizeButton.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panView))
         self.addGestureRecognizer(panGesture)
@@ -47,18 +47,14 @@ class Widget: UIView {
         self.addGestureRecognizer(tap)
         
         
-        sizeButton.addTarget(self, action: #selector(changeSize), for: .touchUpInside)
         
+        sizeButton.addTarget(self, action: #selector(changeSize), for: .touchUpInside)
+        self.addSubview(sizeButton)
         
         delButton.setTitle("x", for: .normal)
         delButton.setTitleColor(.red, for: .normal)
-        delButton.autoresizingMask = [.flexibleLeftMargin, .flexibleBottomMargin]
         delButton.addTarget(self, action: #selector(deleteWidget), for: .touchUpInside)
-        
-        
-        self.addSubview(self.shield)
         self.addSubview(delButton)
-        self.addSubview(sizeButton)
     }
     
     required init?(coder: NSCoder) {
@@ -96,7 +92,6 @@ class Widget: UIView {
                     break
                 }
             }
-            //print(screenWidgets.count)
             
             self.removeFromSuperview()
             }))
@@ -109,9 +104,6 @@ class Widget: UIView {
             }
             topController.present(alert, animated: true, completion: nil)
         }
-    }
-    
-    func updateView(){
     }
     
     @objc func changeSize(sender: UIButton) {
@@ -127,7 +119,6 @@ class Widget: UIView {
             let newY = self.calculateCoords(PHA: self.placeHoldersAccessed).y
             self.ogCenter = CGPoint(x:newX, y:newY)
             self.size = 2
-            updateView()
         } else if(self.size == 2 && self.ogPosition.x == CGFloat(placeHolders.grid[0][0].posX) && checkSizeAvailablility(start: self.placeHoldersAccessed[0], desiredSize: 3)){
             
             self.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 374.0, height: 362.0)
@@ -144,7 +135,6 @@ class Widget: UIView {
             let newY = self.calculateCoords(PHA: self.placeHoldersAccessed).y
             self.ogCenter = CGPoint(x:newX, y:newY)
             self.size = 3
-            updateView()
         } else {
             self.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 177.0, height: 177.0)
             
@@ -158,7 +148,6 @@ class Widget: UIView {
             let newY = self.calculateCoords(PHA: self.placeHoldersAccessed).y
             self.ogCenter = CGPoint(x:newX, y:newY)
             self.size = 1
-            updateView()
         }
         placeHolders.gridPrint()
     }
@@ -509,7 +498,5 @@ class Widget: UIView {
     var size: Int
     var placeHoldersAccessed: Array<PlaceHolder>
     var number: Int
-    let shield = UIView(frame: CGRect(x: 0, y: 0, width: 177, height: 177))
     
-
 }
