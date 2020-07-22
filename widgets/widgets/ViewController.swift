@@ -152,6 +152,9 @@ class ViewController: UIViewController {
     let defaults = UserDefaults.standard
     
     let editButton = UIButton(type: .system) // let preferred over var here
+    
+    let plusWidget = UIButton(frame: CGRect(x: 165.0 , y: 700.0, width: 90.0, height: 90.0))
+    let image = UIImage(named: "SquareAdd50")
 
     @IBOutlet weak var emptyMessage: UILabel!
     @IBOutlet weak var parentButton: UIButton!
@@ -258,6 +261,7 @@ class ViewController: UIViewController {
             parentButton.isHidden = false
             toDoButton.isHidden = false
             apptButton.isHidden = false
+            plusWidget.isHidden = false
             if screenWidgets.count > 0{
                 for i in 0...(screenWidgets.count-1) {
                     screenWidgets[i].delButton.isHidden = false
@@ -279,6 +283,7 @@ class ViewController: UIViewController {
             parentButton.isHidden = true
             toDoButton.isHidden = true
             apptButton.isHidden = true
+            plusWidget.isHidden = true
             if screenWidgets.count > 0{
                 for i in 0...(screenWidgets.count-1) {
                     screenWidgets[i].delButton.isHidden = true
@@ -332,6 +337,11 @@ class ViewController: UIViewController {
         parentButton.isHidden = true
         toDoButton.isHidden = true
         apptButton.isHidden = true
+        plusWidget.setImage(image?.withTintColor(.black), for: .normal)
+        plusWidget.addTarget(self, action: #selector(self.addToDo(_:)), for: UIControl.Event.touchUpInside)
+        plusWidget.contentHorizontalAlignment = .center
+        plusWidget.isHidden = true
+        self.view.addSubview(plusWidget)
         
         
         // let layout = NSKeyedArchiver.archivedData(withRootObject: placeHolders.grid)
