@@ -51,7 +51,7 @@ class Widget: UIView {
         
         
         delButton.setTitle("x", for: .normal)
-        delButton.setTitleColor(.red, for: .normal)
+        delButton.setTitleColor(.systemRed, for: .normal)
         delButton.autoresizingMask = [.flexibleLeftMargin, .flexibleBottomMargin]
         delButton.addTarget(self, action: #selector(deleteWidget), for: .touchUpInside)
         
@@ -74,7 +74,6 @@ class Widget: UIView {
                    topController = presentedViewController
                }
                currentWidget = self.number
-                print(self.number)
                topController.performSegue(withIdentifier: "showDetail", sender: nil)
            }
        }

@@ -28,7 +28,7 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         addTask.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
         addTask.layer.cornerRadius = 0.5 * addTask.bounds.size.width
         addTask.clipsToBounds = true
-        addTask.backgroundColor = .blue
+        addTask.backgroundColor = .systemBlue
         addTask.setTitleColor(.white, for: .normal)
         addTask.setTitle("+", for: .normal)
         addTask.contentHorizontalAlignment = .center
@@ -39,7 +39,7 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         fullViewAddTask.frame = CGRect(x: 320, y: 670, width: 70, height: 70)
         fullViewAddTask.layer.cornerRadius = 0.5 * fullViewAddTask.bounds.size.width
         fullViewAddTask.clipsToBounds = true
-        fullViewAddTask.backgroundColor = .blue
+        fullViewAddTask.backgroundColor = .systemBlue
         fullViewAddTask.setTitleColor(.white, for: .normal)
         fullViewAddTask.setTitle("+", for: .normal)
         fullViewAddTask.addTarget(self, action: #selector(self.addButton), for: UIControl.Event.touchUpInside)
@@ -178,7 +178,7 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
     //Method for adding a task
     @objc func addButton(_ sender: UIButton!) {
         var textField = UITextField()
-        let alert = UIAlertController(title: "Add New Item", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add New Task", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add Item", style: .default)
         {
             (action)in
@@ -227,7 +227,7 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
     
 //Data Members
     var itemArray: [String] = [] //array for user's tasks
-    var label = UILabel(frame: CGRect(x: 28, y: 141, width: 200, height: 21)) //label to display task on widget
+    var label = UILabel(frame: CGRect(x: 20, y: 141, width: 200, height: 21)) //label to display title on widget
     let defaults = UserDefaults.standard //to store user data locally
     let addTask = UIButton(type: .system) //button to add to todo list
     //let remove = UIButton(type: .system) //removes a task from list
