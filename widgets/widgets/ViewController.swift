@@ -8,10 +8,10 @@
 
 import UIKit
 
+
 //PlaceHolder Struct
-struct PlaceHolder {
+struct PlaceHolder{
     var filled: Bool
-    // the position of a CGRect is top left
     var posX, posY: Double
     var xC, yC: Double
     var frame: CGRect
@@ -35,7 +35,7 @@ struct PlaceHolder {
         self.yC = 132.5 + Double(row * 185)
         self.frame = CGRect(x: self.posX, y: self.posY, width: 177, height: 177)
     }
-    
+
     
     mutating func setNumber(number: Int){
         self.number = number
@@ -133,18 +133,55 @@ public var editOn = false
 var screenWidgets: [Widget] = []
 var placeHolders = placeHolderArray()
 var taskW = ToDoWidget()
+var apptW = AppointmentsWidget()
 
+
+
+struct Player : Codable {
+    
+    var name: String
+    var highScore: Int
+}
 
 
 class ViewController: UIViewController {
-
+    
     var centerX = 0
     var centerY = 0
     
+    let defaults = UserDefaults.standard
+    
     let editButton = UIButton(type: .system) // let preferred over var here
-    let addWidgetButton = UIButton(type: .system)
 
-    @IBOutlet weak var widgetMenu: UITableView!
+    @IBOutlet weak var emptyMessage: UILabel!
+    @IBOutlet weak var parentButton: UIButton!
+    @IBOutlet weak var toDoButton: UIButton!
+    @IBOutlet weak var apptButton: UIButton!
+    
+    
+    func saveUserDefaults(_ sender: Any) {
+        let player = Player(name: "Axel", highScore: 42)
+        let defaults = UserDefaults.standard
+        
+        // Use PropertyListEncoder to convert Player into Data / NSData
+        defaults.set(try? PropertyListEncoder().encode(player), forKey: "player")
+    }
+    
+    /*func loadUserDefaults(_ sender: Any) {
+        let defaults = UserDefaults.standard
+        guard let playerData = defaults.object(forKey: "player") as? Data else {
+            return
+        }
+        
+        // Use PropertyListDecoder to convert Data into Player
+        guard let player = try? PropertyListDecoder().decode(Player.self, from: playerData) else {
+            return
+        }
+            
+        print("player name is \(player.name)")
+    }*/
+    
+    
     
     @IBAction func addWidget(_ sender: UIButton) {
         // the edit button
@@ -159,9 +196,39 @@ class ViewController: UIViewController {
             // will find the next empty space and change the center of the new widget to that one
            placeNextWidget(PHA: &placeHolders.grid, addedWidget: newWidget)
             placeHolders.gridPrint()
-            self.view.insertSubview(newWidget, belowSubview: widgetMenu)
+            self.view.addSubview(newWidget)
             screenWidgets.append(newWidget)
+            emptyMessage.isHidden = true
         }
+        //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
+    }
+    
+    @IBAction func addToDo(_ sender: UIButton) {
+        if editOn == false{return}
+         if self.hasNextSpot() {
+            let toDoWidget = ToDoWidget(frame: CGRect(x: 0.0, y: 0.0, width: 177, height: 177))
+            self.view.addSubview(toDoWidget)
+            screenWidgets.append(toDoWidget)
+            taskW = toDoWidget
+            placeNextWidget(PHA: &placeHolders.grid, addedWidget: toDoWidget)
+            emptyMessage.isHidden = true
+            
+        }
+        //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
+    }
+    
+    @IBAction func addAppt(_ sender: UIButton) {
+        if editOn == false{return}
+         if self.hasNextSpot() {
+            let apptWidget = AppointmentsWidget(frame: CGRect(x: 0.0, y: 0.0, width: 177, height: 177))
+            self.view.addSubview(apptWidget)
+            screenWidgets.append(apptWidget)
+            apptW = apptWidget
+            placeNextWidget(PHA: &placeHolders.grid, addedWidget: apptWidget)
+            emptyMessage.isHidden = true
+            
+        }
+        //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
     }
     
     func placeNextWidget(PHA: inout [[PlaceHolder]], addedWidget: Widget){
@@ -181,70 +248,63 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func addToDo(_ sender: UIButton) {
-        if editOn == false{return}
-         if self.hasNextSpot() {
-            let toDoWidget = ToDoWidget(frame: CGRect(x: 0.0, y: 0.0, width: 177, height: 177))
-            self.view.insertSubview(toDoWidget, belowSubview: widgetMenu)
-            screenWidgets.append(toDoWidget)
-            taskW = toDoWidget
-            placeNextWidget(PHA: &placeHolders.grid, addedWidget: toDoWidget)
-            self.view.insertSubview(toDoWidget, belowSubview: widgetMenu)
-            screenWidgets.append(toDoWidget)
-        }
-        //self.view.addSubview(newWidget)
-    }
+    
     
     @objc func editHome(sender: UIButton!) {
         if editOn == false {editOn = true}
         else {editOn = false}
         if editOn == true {
             editButton.setTitle("done", for: .normal)
-            addWidgetButton.isHidden = false
-            
+            parentButton.isHidden = false
+            toDoButton.isHidden = false
+            apptButton.isHidden = false
             if screenWidgets.count > 0{
                 for i in 0...(screenWidgets.count-1) {
                     screenWidgets[i].delButton.isHidden = false
                     screenWidgets[i].sizeButton.isHidden = false
+                    screenWidgets[i].shield.isHidden = false
                     if screenWidgets[i].number == 1 {
                         let tdW = screenWidgets[i] as! ToDoWidget
                         tdW.addTask.isHidden = true
+                    }
+                    if screenWidgets[i].number == 2 {
+                        let apW = screenWidgets[i] as! AppointmentsWidget
+                        apW.addTask.isHidden = true
                     }
                 }
             }
         }
         else {
             editButton.setTitle("edit", for: .normal)
-            addWidgetButton.isHidden = true
-            widgetMenu.isHidden = true
-            addWidgetButton.isHidden = true
-            addWidgetButton.setTitle("+", for: .normal)
-            addWidgetButton.frame = CGRect(x: 20, y: 44, width: 40, height: 25)
+            parentButton.isHidden = true
+            toDoButton.isHidden = true
+            apptButton.isHidden = true
             if screenWidgets.count > 0{
                 for i in 0...(screenWidgets.count-1) {
                     screenWidgets[i].delButton.isHidden = true
                     screenWidgets[i].sizeButton.isHidden = true
+                    screenWidgets[i].shield.isHidden = true
+                    
                     if screenWidgets[i].number == 1 {
                         let tdW = screenWidgets[i] as! ToDoWidget
                         tdW.addTask.isHidden = false
                     }
+                    if screenWidgets[i].number == 2 {
+                        let apW = screenWidgets[i] as! AppointmentsWidget
+                        apW.addTask.isHidden = false
+                    }
                 }
+                
             }
+            else{
+                emptyMessage.isHidden = false
+            }
+            
+            //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
+            
         }
     }
     
-    @objc func plusButton(sender: UIButton!) {
-        if widgetMenu.isHidden == true {
-            widgetMenu.isHidden = false
-            addWidgetButton.setTitle("close", for: .normal)
-            addWidgetButton.frame = CGRect(x: 263, y: 44, width: 40, height: 25)
-        }
-        else{
-            widgetMenu.isHidden = true
-            addWidgetButton.setTitle("+", for: .normal)
-            addWidgetButton.frame = CGRect(x: 20, y: 44, width: 40, height: 25)
-        }
-    }
     
     func hasNextSpot() -> Bool{
         for row in (0...3){
@@ -263,19 +323,22 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         //print(widgetOne.center)
-        editButton.frame = CGRect(x: 348, y: 44, width: 40, height: 25)
+        editButton.frame = CGRect(x: 9, y: 779, width: 40, height: 25)
         editButton.setTitle("edit", for: .normal)
         editButton.contentHorizontalAlignment = .right
         editButton.addTarget(self, action: #selector(self.editHome), for: UIControl.Event.touchUpInside)
         self.view.addSubview(editButton)
-        widgetMenu.frame = CGRect(x: 0, y: 44, width: 259, height: 769)
-        widgetMenu.isHidden = true
-        addWidgetButton.setTitle("+", for: .normal)
-        addWidgetButton.frame = CGRect(x: 20, y: 44, width: 40, height: 25)
         editButton.contentHorizontalAlignment = .left
-        addWidgetButton.addTarget(self, action: #selector(self.plusButton), for: UIControl.Event.touchUpInside)
-        addWidgetButton.isHidden = true
-        self.view.addSubview(addWidgetButton)
+        parentButton.isHidden = true
+        toDoButton.isHidden = true
+        apptButton.isHidden = true
+        
+        
+        // let layout = NSKeyedArchiver.archivedData(withRootObject: placeHolders.grid)
+        //self.defaults.set(layout, forKey: "layoutState")
+        
+        //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
+        
     }
     
     
