@@ -144,7 +144,7 @@ struct Player : Codable {
 }
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIPopoverPresentationControllerDelegate {
     
     var centerX = 0
     var centerY = 0
@@ -160,6 +160,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var parentButton: UIButton!
     @IBOutlet weak var toDoButton: UIButton!
     @IBOutlet weak var apptButton: UIButton!
+    @IBOutlet weak var plusWidgetButton: UIButton!
     
     
     func saveUserDefaults(_ sender: Any) {
@@ -184,7 +185,17 @@ class ViewController: UIViewController {
         print("player name is \(player.name)")
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showPopOver"{
+            let popMenu = segue.destination
+            popMenu.popoverPresentationController?.delegate = self
+        }
+    }
     
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        print("this thing worked")
+        return UIModalPresentationStyle.none
+    }
     
     @IBAction func addWidget(_ sender: UIButton) {
         // the edit button

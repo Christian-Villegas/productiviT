@@ -59,6 +59,16 @@
                                     <action selector="addAppt:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DLM-1t-PLk"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AAc-bR-i0U" userLabel="plusWidgetButton">
+                                <rect key="frame" x="182" y="724" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="SquareAdd50"/>
+                                <connections>
+                                    <segue destination="QWE-tG-sWb" kind="popoverPresentation" identifier="showPopOver" popoverAnchorView="AAc-bR-i0U" id="V1o-lY-DFS">
+                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                    </segue>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
@@ -69,6 +79,7 @@
                         <outlet property="apptButton" destination="TIZ-mr-Few" id="HGF-T6-Wsk"/>
                         <outlet property="emptyMessage" destination="jib-zy-KO1" id="3LB-CR-nqI"/>
                         <outlet property="parentButton" destination="PKK-ur-7VY" id="vuz-B3-ktY"/>
+                        <outlet property="plusWidgetButton" destination="AAc-bR-i0U" id="P4T-6q-dFn"/>
                         <outlet property="toDoButton" destination="bbv-DY-x4I" id="x3U-sp-XoL"/>
                     </connections>
                 </viewController>
@@ -194,8 +205,40 @@
             </objects>
             <point key="canvasLocation" x="53.623188405797109" y="123.88392857142857"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="4S8-uF-RHn">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="b8L-dc-Ae4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <viewController id="QWE-tG-sWb" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QSa-k3-B8L">
+                        <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rxg-m5-95L">
+                                <rect key="frame" x="152" y="275" width="47" height="20.5"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.56480497119999995" green="0.1689142287" blue="0.1675068438" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Can you see me" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3RA-mH-BQO">
+                                <rect key="frame" x="39" y="-23" width="123" height="223"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="72e-R7-CVD"/>
+                    </view>
+                    <size key="freeformSize" width="200" height="200"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="2053.6231884057975" y="-615.40178571428567"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="SquareAdd50" width="50" height="50"/>
         <image name="house.fill" catalog="system" width="128" height="106"/>
         <image name="person.3.fill" catalog="system" width="128" height="61"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
