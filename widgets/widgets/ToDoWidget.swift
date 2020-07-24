@@ -5,7 +5,6 @@
 //  Created by Christopher Cordero on 7/8/20.
 //  Copyright © 2020 Christopher Cordero. All rights reserved.
 //
-
 import UIKit
 
 class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
@@ -13,34 +12,39 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
     //custom constructor
    override init(frame: CGRect) {
         taskList = UITableView(frame: CGRect(x: 0, y: 0, width: 414, height: 800), style: .plain)
-        miniTable = UITableView(frame: CGRect(x: 0, y: 10, width: 172, height: 130), style: .plain)
+        miniTable = UITableView(frame: CGRect(x: 0, y: 0, width: 177, height: 140), style: .plain)
         
         super.init(frame: frame)
        
        
+    
+    
         self.number = 1//number assigned to ToDo widgets, for checking which widget to display when full view is requested
         self.label.text = "To Do List"//widget will display this when first added
+        //self.label.textColor = .black
        
         //Initializations for addTask button
-        addTask.frame = CGRect(x: 135, y: 135, width: 35, height: 35)
+        /*addTask.frame = CGRect(x: 135, y: 135, width: 35, height: 35)
+        addTask.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
         addTask.layer.cornerRadius = 0.5 * addTask.bounds.size.width
         addTask.clipsToBounds = true
-        addTask.backgroundColor = .blue
-        addTask.setTitleColor(.white, for: .normal)
-        addTask.setTitle("+", for: .normal)
-        addTask.contentHorizontalAlignment = .center
+        addTask.backgroundColor = .systemBlue
+        addTask.setImage(#imageLiteral(resourceName: "plus_icon"), for: .normal)
+        addTask.tintColor = .white
+        addTask.imageEdgeInsets = .init(top:12, left: 12, bottom: 12, right: 12)
         addTask.addTarget(self, action: #selector(self.addButton), for: UIControl.Event.touchUpInside)
         addTask.isHidden = true
        
         //Initializations for addTask button on full view
-        fullViewAddTask.frame = CGRect(x: 172, y: 670, width: 70, height: 70)
+        fullViewAddTask.frame = CGRect(x: 320, y: 670, width: 70, height: 70)
         fullViewAddTask.layer.cornerRadius = 0.5 * fullViewAddTask.bounds.size.width
         fullViewAddTask.clipsToBounds = true
-        fullViewAddTask.backgroundColor = .blue
-        fullViewAddTask.setTitleColor(.white, for: .normal)
-        fullViewAddTask.setTitle("+", for: .normal)
+        fullViewAddTask.backgroundColor = .systemBlue
+        fullViewAddTask.setImage(#imageLiteral(resourceName: "plus_icon"), for: .normal)
+        fullViewAddTask.tintColor = .white
+        fullViewAddTask.imageEdgeInsets = .init(top:22, left: 22, bottom: 22, right: 22)
         fullViewAddTask.addTarget(self, action: #selector(self.addButton), for: UIControl.Event.touchUpInside)
-       
+       */
         //Initializations for remove button in widget mode
         //remove.frame = CGRect(x:7, y:130, width: 40, height:40 )
         //remove.layer.cornerRadius = 0.5 * addTask.bounds.size.width
@@ -63,21 +67,25 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         miniTable.delegate = self
         miniTable.dataSource = self
         miniTable.estimatedRowHeight = 100
-        miniTable.rowHeight = UITableView.automaticDimension
-
+        //miniTable.rowHeight = UITableView.automaticDimension
         miniTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+    
+        //constraining Label
+        self.label.autoresizingMask = [.flexibleRightMargin, .flexibleTopMargin]
+    
+    
         
        
         //adding to UIView displayed on the slide up full view mode
         fullView.addSubview(taskList)
-        fullView.addSubview(fullViewAddTask)
+        //fullView.addSubview(fullViewAddTask)
     
        
         //add components to subview
         self.addSubview(label)
-        self.insertSubview(miniTable, belowSubview: delButton)
+    self.insertSubview(miniTable, belowSubview: self.shield)
         //self.addSubview(remove)
-        self.addSubview(addTask)
+        //self.addSubview(addTask)
         
 
    }
@@ -96,14 +104,19 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         return itemArray.count
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension //Choose your custom row height
+        return UITableView.automaticDimension
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.backgroundColor = .none
         cell.textLabel?.text = itemArray[indexPath.row]
-        cell.textLabel?.font = UIFont(name: "HelveticaNeue-Thin", size:20)
-        cell.textLabel?.adjustsFontForContentSizeCategory = true
+        cell.textLabel?.font = UIFont(name: "HelveticaNeue-Thin", size:30)
+        cell.textLabel?.textColor = .black
+        cell.textLabel?.numberOfLines=0
+        cell.textLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
+        cell.textLabel?.minimumScaleFactor = 0.2
+        //cell.textLabel?.adjustsFontForContentSizeCategory = true
         return cell
     }
 
@@ -147,12 +160,27 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
     }
     
 //
-    
+    //Method for updating view to size
+    override func updateView() {
+        switch self.size {
+        case 1:
+            miniTable.frame = CGRect(x: 0, y: 3, width: 172, height: 130)
+            shield.frame = CGRect(x: 0, y: 0, width: 177, height: 177)
+        case 2:
+            miniTable.frame = CGRect(x: 0, y: 3, width: 369, height: 130)
+            shield.frame = CGRect(x: 0, y: 0, width: 374, height: 177)
+        case 3:
+            miniTable.frame = CGRect(x: 0, y: 3, width: 369, height: 318)
+            shield.frame = CGRect(x: 0, y: 0, width: 374, height: 362)
+        default:
+            miniTable.frame = CGRect(x: 0, y: 3, width: 172, height: 130)
+        }
+    }
     
     //Method for adding a task
-    @objc func addButton(_ sender: UIButton!) {
+    @objc override func addButton(_ sender: UIButton!) {
         var textField = UITextField()
-        let alert = UIAlertController(title: "Add New Item", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add New Task", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add Item", style: .default)
         {
             (action)in
@@ -201,11 +229,11 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
     
 //Data Members
     var itemArray: [String] = [] //array for user's tasks
-    var label = UILabel(frame: CGRect(x: 28, y: 141, width: 200, height: 21)) //label to display task on widget
+    //var label = UILabel(frame: CGRect(x: 20, y: 141, width: 200, height: 21)) //label to display title on widget
     let defaults = UserDefaults.standard //to store user data locally
-    let addTask = UIButton(type: .system) //button to add to todo list
+    //let addTask = UIButton(type: .system) //button to add to todo list
     //let remove = UIButton(type: .system) //removes a task from list
-    let fullViewAddTask = UIButton(type: .system) //button on full view that adds a task
+    //let fullViewAddTask = UIButton(type: .system) //button on full view that adds a task
     var taskList: UITableView //shows table view on the full view
     var miniTable: UITableView //table view for widget mode
     

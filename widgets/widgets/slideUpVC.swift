@@ -1,4 +1,4 @@
-//
+////
 //  slideUpVC.swift
 //  widgets
 //
@@ -31,6 +31,9 @@ class slideUpVC: UIViewController {
         case 1:
             topTitle.text = "To Do List"
             view.addSubview(taskW.fullView)
+        case 2:
+            topTitle.text = "Appointments"
+            view.addSubview(apptW.fullView)
             
         default:
             topTitle.text = "None"
