@@ -23,7 +23,7 @@ class AppointmentsWidget: Widget, UITableViewDelegate, UITableViewDataSource {
         super.init(frame: frame)
         self.number = 2//number assigned to ToDo widgets, for checking which widget to display when full view is requested
         self.label.text = "Appointments"//widget will display this when first added
-        
+        self.title = "Appointments Widget"
         //initializations for datepicker module
         datePicker.frame = CGRect(x: 10, y: 50, width: self.frame.width, height: 200)
         datePicker.timeZone = NSTimeZone.local

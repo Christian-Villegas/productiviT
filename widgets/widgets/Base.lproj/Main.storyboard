@@ -16,30 +16,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PKK-ur-7VY">
-                                <rect key="frame" x="338" y="685" width="76" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.64811247589999998" green="0.13144698739999999" blue="0.13124409319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Parent">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="addWidget:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vSb-ED-Mbv"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bbv-DY-x4I">
-                                <rect key="frame" x="338" y="761" width="76" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                <state key="normal" title="ToDo">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="addToDo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ob8-xy-AxL"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Add some Widgets to get started!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jib-zy-KO1">
                                 <rect key="frame" x="75" y="300" width="265" height="164"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -47,26 +23,12 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TIZ-mr-Few">
-                                <rect key="frame" x="338" y="724" width="76" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                <state key="normal" title="Appt">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="addAppt:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DLM-1t-PLk"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AAc-bR-i0U" userLabel="plusWidgetButton">
                                 <rect key="frame" x="182" y="724" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="SquareAdd50"/>
                                 <connections>
-                                    <segue destination="QWE-tG-sWb" kind="popoverPresentation" identifier="showPopOver" popoverAnchorView="AAc-bR-i0U" id="V1o-lY-DFS">
-                                        <popoverArrowDirection key="popoverArrowDirection" up="YES"/>
-                                    </segue>
+                                    <action selector="showWidgetMenu:" destination="BYZ-38-t0r" eventType="touchUpInside" id="F1V-uQ-4ru"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -76,11 +38,8 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Home" image="house.fill" catalog="system" selectedImage="house.fill" id="6hT-k9-4dg"/>
                     <connections>
-                        <outlet property="apptButton" destination="TIZ-mr-Few" id="HGF-T6-Wsk"/>
                         <outlet property="emptyMessage" destination="jib-zy-KO1" id="3LB-CR-nqI"/>
-                        <outlet property="parentButton" destination="PKK-ur-7VY" id="vuz-B3-ktY"/>
                         <outlet property="plusWidgetButton" destination="AAc-bR-i0U" id="P4T-6q-dFn"/>
-                        <outlet property="toDoButton" destination="bbv-DY-x4I" id="x3U-sp-XoL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -228,7 +187,7 @@
                     <size key="freeformSize" width="200" height="200"/>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1977" y="-566"/>
+            <point key="canvasLocation" x="1823" y="-368"/>
         </scene>
     </scenes>
     <resources>

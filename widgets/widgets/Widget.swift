@@ -11,6 +11,7 @@ class Widget: UIView {
     
     override init(frame: CGRect) {
         self.number = 0
+        self.title = "Parent Widget"
         self.ogPosition = CGPoint(x: 0, y: 0)// this holds the staying place of the widget also top left corner
         self.ogCenter = CGPoint(x: 0, y: 0)//this holds the staying center
         self.size = 1 // size level goes up to 3
@@ -104,7 +105,7 @@ class Widget: UIView {
             self.clearWPHA()
             for i in (0...(screenWidgets.count-1)){
                 if(screenWidgets[i] == self) {
-                    screenWidgets.remove(at: i) //remove from widget array
+                    screenWidgets.remove(at: i) //remove from
                     break
                 }
             }
@@ -118,6 +119,7 @@ class Widget: UIView {
             }
             topController.present(alert, animated: true, completion: nil)
         }
+        widgetList.append(self.title!)
     }
     
     func updateView(){
@@ -503,6 +505,7 @@ class Widget: UIView {
     }
 
     //Data Members://
+    var title: String?
     let delButton = UIButton(frame: CGRect(x: 135, y: 4, width: 40.0, height: 40.0))
     let sizeButton = UIButton(frame: CGRect(x: 140.0, y: 140.0, width: 30.0, height: 30.0))
     let fullView = UIView(frame: CGRect(x: 0, y: 74, width: 414.0, height: 746.0))

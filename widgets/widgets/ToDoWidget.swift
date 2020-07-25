@@ -15,7 +15,7 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         miniTable = UITableView(frame: CGRect(x: 0, y: 0, width: 177, height: 140), style: .plain)
         
         super.init(frame: frame)
-       
+        self.title = "To Do Widget"
        
     
     
