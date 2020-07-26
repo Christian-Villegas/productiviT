@@ -8,6 +8,9 @@
 
 import UIKit
 
+/*When widgetsList size is 0, put message that tells user they can't place anymore*/
+
+/*Tap gesture recognizer + menu is open closes menu*/
 
 //PlaceHolder Struct
 struct PlaceHolder{
@@ -19,6 +22,7 @@ struct PlaceHolder{
     var number: Int
     
     init(row: Int, column: Int) {
+        
         self.filled = false
         self.widget = nil
         self.number = 0
@@ -30,7 +34,6 @@ struct PlaceHolder{
             self.posX = 217
             self.xC = 305.5
         }
-
         self.posY = 44 + Double(row * 185)
         self.yC = 132.5 + Double(row * 185)
         self.frame = CGRect(x: self.posX, y: self.posY, width: 177, height: 177)
@@ -134,7 +137,7 @@ var screenWidgets: [Widget] = []
 var placeHolders = placeHolderArray()
 var taskW = ToDoWidget()
 var apptW = AppointmentsWidget()
-
+var widgetList = ["To Do Widget", "Appointments Widget", "Parent Widget"]
 
 
 struct Player : Codable {
@@ -144,7 +147,7 @@ struct Player : Codable {
 }
 
 
-class ViewController: UIViewController, UIPopoverPresentationControllerDelegate {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
     var centerX = 0
     var centerY = 0
@@ -153,14 +156,15 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
     
     let editButton = UIButton(type: .system) // let preferred over var here
     
-    let plusWidget = UIButton(frame: CGRect(x: 165.0 , y: 700.0, width: 90.0, height: 90.0))
     let image = UIImage(named: "SquareAdd50")
+    
+    
+    let menu = UIView()
+    let menuTable = UITableView(frame: CGRect(x: 0, y: 0, width: 200, height: 200), style: .plain)
 
     @IBOutlet weak var emptyMessage: UILabel!
-    @IBOutlet weak var parentButton: UIButton!
-    @IBOutlet weak var toDoButton: UIButton!
-    @IBOutlet weak var apptButton: UIButton!
     @IBOutlet weak var plusWidgetButton: UIButton!
+    
     
     
     func saveUserDefaults(_ sender: Any) {
@@ -185,19 +189,43 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
         print("player name is \(player.name)")
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showPopOver"{
-            let popMenu = segue.destination
-            popMenu.popoverPresentationController?.delegate = self
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return widgetList.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.backgroundColor = .none
+        cell.textLabel?.text = widgetList[indexPath.row]
+        cell.textLabel?.font = UIFont(name: "HelveticaNeue-Thin", size:15)
+        cell.textLabel?.textAlignment = .center
+        cell.textLabel?.textColor = .systemBlue
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let buttonName = widgetList[indexPath.row]
+        switch buttonName {
+        case "To Do Widget":
+            self.addToDo()
+            widgetList.remove(at: indexPath.row)
+        case "Appointments Widget":
+            self.addAppt()
+            widgetList.remove(at: indexPath.row)
+        default:
+            self.addWidget()
+            widgetList.remove(at: indexPath.row)
         }
+        tableView.deselectRow(at: indexPath, animated: true)
+        menu.isHidden = true
+        
     }
     
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        print("this thing worked")
-        return UIModalPresentationStyle.none
-    }
-    
-    @IBAction func addWidget(_ sender: UIButton) {
+    @objc func addWidget() {
         // the edit button
         if editOn == false {return}
         
@@ -210,39 +238,35 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
             // will find the next empty space and change the center of the new widget to that one
            placeNextWidget(PHA: &placeHolders.grid, addedWidget: newWidget)
             placeHolders.gridPrint()
-            self.view.addSubview(newWidget)
+            self.view.insertSubview(newWidget, belowSubview: menu)
             screenWidgets.append(newWidget)
             emptyMessage.isHidden = true
         }
-        //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
     }
     
-    @IBAction func addToDo(_ sender: UIButton) {
+     @objc func addToDo() {
         if editOn == false{return}
          if self.hasNextSpot() {
             let toDoWidget = ToDoWidget(frame: CGRect(x: 0.0, y: 0.0, width: 177, height: 177))
-            self.view.addSubview(toDoWidget)
+            self.view.insertSubview(toDoWidget, belowSubview: menu)
             screenWidgets.append(toDoWidget)
             taskW = toDoWidget
             placeNextWidget(PHA: &placeHolders.grid, addedWidget: toDoWidget)
             emptyMessage.isHidden = true
-            
         }
-        //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
     }
     
-    @IBAction func addAppt(_ sender: UIButton) {
+    @objc func addAppt() {
         if editOn == false{return}
          if self.hasNextSpot() {
             let apptWidget = AppointmentsWidget(frame: CGRect(x: 0.0, y: 0.0, width: 177, height: 177))
-            self.view.addSubview(apptWidget)
+            self.view.insertSubview(apptWidget, belowSubview: menu)
+
             screenWidgets.append(apptWidget)
             apptW = apptWidget
             placeNextWidget(PHA: &placeHolders.grid, addedWidget: apptWidget)
             emptyMessage.isHidden = true
-            
         }
-        //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
     }
     
     func placeNextWidget(PHA: inout [[PlaceHolder]], addedWidget: Widget){
@@ -269,10 +293,7 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
         else {editOn = false}
         if editOn == true {
             editButton.setTitle("done", for: .normal)
-            parentButton.isHidden = false
-            toDoButton.isHidden = false
-            apptButton.isHidden = false
-            plusWidget.isHidden = false
+           plusWidgetButton.isHidden = false
             if screenWidgets.count > 0{
                 for i in 0...(screenWidgets.count-1) {
                     screenWidgets[i].delButton.isHidden = false
@@ -291,10 +312,9 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
         }
         else {
             editButton.setTitle("edit", for: .normal)
-            parentButton.isHidden = true
-            toDoButton.isHidden = true
-            apptButton.isHidden = true
-            plusWidget.isHidden = true
+            menuTable.reloadData()
+            plusWidgetButton.isHidden = true
+            menu.isHidden = true
             if screenWidgets.count > 0{
                 for i in 0...(screenWidgets.count-1) {
                     screenWidgets[i].delButton.isHidden = true
@@ -315,9 +335,6 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
             else{
                 emptyMessage.isHidden = false
             }
-            
-            //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
-            
         }
     }
     
@@ -334,6 +351,13 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
         return false
     }
     
+    @IBAction func showWidgetMenu(_ sender: Any) {
+         menuTable.reloadData()
+        menu.isHidden = false
+        print("menu is no longer hidden")
+    }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -343,22 +367,32 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
         editButton.setTitle("edit", for: .normal)
         editButton.contentHorizontalAlignment = .right
         editButton.addTarget(self, action: #selector(self.editHome), for: UIControl.Event.touchUpInside)
-        self.view.addSubview(editButton)
+        
         editButton.contentHorizontalAlignment = .left
-        parentButton.isHidden = true
-        toDoButton.isHidden = true
-        apptButton.isHidden = true
-        plusWidget.setImage(image?.withTintColor(.black), for: .normal)
-        plusWidget.addTarget(self, action: #selector(self.addToDo(_:)), for: UIControl.Event.touchUpInside)
-        plusWidget.contentHorizontalAlignment = .center
-        plusWidget.isHidden = true
-        self.view.addSubview(plusWidget)
+        
+        plusWidgetButton.isHidden = true
         
         
-        // let layout = NSKeyedArchiver.archivedData(withRootObject: placeHolders.grid)
-        //self.defaults.set(layout, forKey: "layoutState")
+//        menu.arrowDirection = .up
+//        menu.arrowOffset = CGFloat(2.0)
+//        menu.arrowOffset = CGFloat(2.0)
+        menu.isHidden = true
+        menu.frame = CGRect(x:105, y: 525, width: 200, height: 200)
+        menu.layer.borderWidth = 3.0
+        menu.layer.borderColor = UIColor.black.cgColor
+        menu.layer.cornerRadius = 15.0
         
-        //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
+        menuTable.delegate = self
+        menuTable.dataSource = self
+        menuTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        menuTable.separatorStyle = .singleLine
+        menuTable.layer.borderWidth = 3.0
+        menuTable.layer.borderColor = UIColor.black.cgColor
+        menuTable.layer.cornerRadius = 15.0
+        
+        self.view.addSubview(editButton)
+        self.view.addSubview(menu)
+        menu.addSubview(menuTable)
         
     }
     
