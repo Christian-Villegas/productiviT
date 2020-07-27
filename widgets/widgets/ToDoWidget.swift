@@ -5,6 +5,7 @@
 //  Created by Christopher Cordero on 7/8/20.
 //  Copyright © 2020 Christopher Cordero. All rights reserved.
 //
+
 import UIKit
 
 class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
@@ -15,9 +16,9 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         miniTable = UITableView(frame: CGRect(x: 0, y: 0, width: 177, height: 140), style: .plain)
         
         super.init(frame: frame)
-        self.title = "To Do Widget"
        
-    
+       
+        self.title = "To Do Widget"
     
         self.number = 1//number assigned to ToDo widgets, for checking which widget to display when full view is requested
         self.label.text = "To Do List"//widget will display this when first added
@@ -62,7 +63,8 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
         taskList.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     
         //initializations for mini table
-        miniTable.backgroundColor = .none
+        miniTable.backgroundColor = .white
+        miniTable.alpha = 0.7
         miniTable.separatorStyle = UITableViewCell.SeparatorStyle.none
         miniTable.delegate = self
         miniTable.dataSource = self
@@ -78,7 +80,7 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
        
         //adding to UIView displayed on the slide up full view mode
         fullView.addSubview(taskList)
-        //fullView.addSubview(fullViewAddTask)
+        fullView.addSubview(fullViewAddTask)
     
        
         //add components to subview
@@ -161,21 +163,23 @@ class ToDoWidget: Widget, UITableViewDelegate, UITableViewDataSource  {
     
 //
     //Method for updating view to size
-    override func updateView() {
-        switch self.size {
-        case 1:
-            miniTable.frame = CGRect(x: 0, y: 3, width: 172, height: 130)
-            shield.frame = CGRect(x: 0, y: 0, width: 177, height: 177)
-        case 2:
-            miniTable.frame = CGRect(x: 0, y: 3, width: 369, height: 130)
-            shield.frame = CGRect(x: 0, y: 0, width: 374, height: 177)
-        case 3:
-            miniTable.frame = CGRect(x: 0, y: 3, width: 369, height: 318)
-            shield.frame = CGRect(x: 0, y: 0, width: 374, height: 362)
-        default:
-            miniTable.frame = CGRect(x: 0, y: 3, width: 172, height: 130)
-        }
-    }
+     override func updateView() {
+           switch self.size {
+           case 1:
+               miniTable.frame = CGRect(x: 0, y: 0, width: 177, height: 140)
+               shield.frame = CGRect(x: 0, y: 0, width: 177, height: 177)
+           case 2:
+               miniTable.frame = CGRect(x: 0, y: 0, width: 374, height: 140)
+               shield.frame = CGRect(x: 0, y: 0, width: 374, height: 177)
+           case 3:
+               miniTable.frame = CGRect(x: 0, y: 0, width: 374, height: 325)
+               shield.frame = CGRect(x: 0, y: 0, width: 374, height: 362)
+           default:
+               miniTable.frame = CGRect(x: 0, y: 0, width: 177, height: 140)
+               
+               shield.frame = CGRect(x: 0, y: 0, width: 177, height: 177)
+           }
+       }
     
     //Method for adding a task
     @objc override func addButton(_ sender: UIButton!) {

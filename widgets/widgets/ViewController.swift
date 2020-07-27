@@ -8,9 +8,6 @@
 
 import UIKit
 
-/*When widgetsList size is 0, put message that tells user they can't place anymore*/
-
-/*Tap gesture recognizer + menu is open closes menu*/
 
 //PlaceHolder Struct
 struct PlaceHolder{
@@ -22,7 +19,6 @@ struct PlaceHolder{
     var number: Int
     
     init(row: Int, column: Int) {
-        
         self.filled = false
         self.widget = nil
         self.number = 0
@@ -34,6 +30,7 @@ struct PlaceHolder{
             self.posX = 217
             self.xC = 305.5
         }
+
         self.posY = 44 + Double(row * 185)
         self.yC = 132.5 + Double(row * 185)
         self.frame = CGRect(x: self.posX, y: self.posY, width: 177, height: 177)
@@ -138,56 +135,35 @@ var placeHolders = placeHolderArray()
 var taskW = ToDoWidget()
 var apptW = AppointmentsWidget()
 var widgetList = ["To Do Widget", "Appointments Widget", "Parent Widget"]
+var colors = [Color(red_: 0.789, green_: 0.789, blue_: 0.789, font_: .black),
+              Color(red_: 0.475, green_: 0.482, blue_: 1, font_: .white),
+              Color(red_: 1, green_: 0.578, blue_: 0.575, font_: .white),
+              Color(red_: 0.328, green_: 0.914, blue_: 0.437, font_: .white),
+              Color(red_: 0.219, green_: 0.598, blue_: 1, font_: .white),
+              Color(red_: 1, green_: 0.767, blue_: 0.281, font_: .white),
+              Color(red_: 0.933, green_: 0.861, blue_: 0.126, font_: .white),
+              Color(red_: 1, green_: 0.312, blue_: 0.326, font_: .white)]
+
+//Grey, purple, salmon, green, blue, orange, yellow, red
 
 
-struct Player : Codable {
-    
-    var name: String
-    var highScore: Int
-}
-
-
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var centerX = 0
     var centerY = 0
-    
-    let defaults = UserDefaults.standard
-    
+
     let editButton = UIButton(type: .system) // let preferred over var here
     
-    let image = UIImage(named: "SquareAdd50")
+    //let dismissMenu = UITapGestureRecognizer(target: self, action: #selector(closeMenu))
+    
+    let plusWidget = UIButton(type: .system)
     
     
     let menu = UIView()
     let menuTable = UITableView(frame: CGRect(x: 0, y: 0, width: 200, height: 200), style: .plain)
 
     @IBOutlet weak var emptyMessage: UILabel!
-    @IBOutlet weak var plusWidgetButton: UIButton!
     
-    
-    
-    func saveUserDefaults(_ sender: Any) {
-        let player = Player(name: "Axel", highScore: 42)
-        let defaults = UserDefaults.standard
-        
-        // Use PropertyListEncoder to convert Player into Data / NSData
-        defaults.set(try? PropertyListEncoder().encode(player), forKey: "player")
-    }
-    
-    func loadUserDefaults(_ sender: Any) {
-        let defaults = UserDefaults.standard
-        guard let playerData = defaults.object(forKey: "player") as? Data else {
-            return
-        }
-        
-        // Use PropertyListDecoder to convert Data into Player
-        guard let player = try? PropertyListDecoder().decode(Player.self, from: playerData) else {
-            return
-        }
-            
-        print("player name is \(player.name)")
-    }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -201,7 +177,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.backgroundColor = .none
         cell.textLabel?.text = widgetList[indexPath.row]
-        cell.textLabel?.font = UIFont(name: "HelveticaNeue-Thin", size:15)
+        cell.textLabel?.font = UIFont(name: "HelveticaNeue", size:15)
         cell.textLabel?.textAlignment = .center
         cell.textLabel?.textColor = .systemBlue
         return cell
@@ -221,7 +197,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             widgetList.remove(at: indexPath.row)
         }
         tableView.deselectRow(at: indexPath, animated: true)
-        menu.isHidden = true
+        menu.fadeOut()
+        let seconds = 0.16
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+            self.menu.isHidden = true
+        }
         
     }
     
@@ -238,35 +218,39 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             // will find the next empty space and change the center of the new widget to that one
            placeNextWidget(PHA: &placeHolders.grid, addedWidget: newWidget)
             placeHolders.gridPrint()
-            self.view.insertSubview(newWidget, belowSubview: menu)
+            self.view.insertSubview(newWidget, belowSubview: editButton)
             screenWidgets.append(newWidget)
             emptyMessage.isHidden = true
         }
+        //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
     }
     
-     @objc func addToDo() {
+    @objc func addToDo() {
         if editOn == false{return}
          if self.hasNextSpot() {
             let toDoWidget = ToDoWidget(frame: CGRect(x: 0.0, y: 0.0, width: 177, height: 177))
-            self.view.insertSubview(toDoWidget, belowSubview: menu)
+            self.view.insertSubview(toDoWidget, belowSubview: editButton)
             screenWidgets.append(toDoWidget)
             taskW = toDoWidget
             placeNextWidget(PHA: &placeHolders.grid, addedWidget: toDoWidget)
             emptyMessage.isHidden = true
+            
         }
+        //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
     }
     
     @objc func addAppt() {
         if editOn == false{return}
          if self.hasNextSpot() {
             let apptWidget = AppointmentsWidget(frame: CGRect(x: 0.0, y: 0.0, width: 177, height: 177))
-            self.view.insertSubview(apptWidget, belowSubview: menu)
-
+            self.view.insertSubview(apptWidget, belowSubview: editButton)
             screenWidgets.append(apptWidget)
             apptW = apptWidget
             placeNextWidget(PHA: &placeHolders.grid, addedWidget: apptWidget)
             emptyMessage.isHidden = true
+            
         }
+        //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
     }
     
     func placeNextWidget(PHA: inout [[PlaceHolder]], addedWidget: Widget){
@@ -293,12 +277,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         else {editOn = false}
         if editOn == true {
             editButton.setTitle("done", for: .normal)
-           plusWidgetButton.isHidden = false
+           plusWidget.isHidden = false
             if screenWidgets.count > 0{
                 for i in 0...(screenWidgets.count-1) {
                     screenWidgets[i].delButton.isHidden = false
                     screenWidgets[i].sizeButton.isHidden = false
                     screenWidgets[i].shield.isHidden = false
+                    screenWidgets[i].editColor.isHidden = false
                     if screenWidgets[i].number == 1 {
                         let tdW = screenWidgets[i] as! ToDoWidget
                         tdW.addTask.isHidden = true
@@ -313,13 +298,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         else {
             editButton.setTitle("edit", for: .normal)
             menuTable.reloadData()
-            plusWidgetButton.isHidden = true
+            plusWidget.isHidden = true
             menu.isHidden = true
             if screenWidgets.count > 0{
                 for i in 0...(screenWidgets.count-1) {
                     screenWidgets[i].delButton.isHidden = true
                     screenWidgets[i].sizeButton.isHidden = true
                     screenWidgets[i].shield.isHidden = true
+                    screenWidgets[i].editColor.isHidden = true
                     
                     if screenWidgets[i].number == 1 {
                         let tdW = screenWidgets[i] as! ToDoWidget
@@ -351,51 +337,103 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return false
     }
     
-    @IBAction func showWidgetMenu(_ sender: Any) {
+    @objc func showWidgetMenu() {
          menuTable.reloadData()
-        menu.isHidden = false
-        print("menu is no longer hidden")
+        if menu.isHidden == true {
+            menu.isHidden = false
+            menu.alpha = 0.0
+            menu.fadeIn()
+            }
+        else{
+            menu.fadeOut()
+            let seconds = 0.16
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                self.menu.isHidden = true
+            }
+        }
+        
+        
     }
     
+    @objc func closeMenu(){
+        print("menu is no longer hidden")
+        self.menu.isHidden = true
+    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         //print(widgetOne.center)
-        editButton.frame = CGRect(x: 348, y: 44, width: 40, height: 25)
+        editButton.frame = CGRect(x: 9, y: 779, width: 40, height: 25)
         editButton.setTitle("edit", for: .normal)
         editButton.contentHorizontalAlignment = .right
         editButton.addTarget(self, action: #selector(self.editHome), for: UIControl.Event.touchUpInside)
-        
+        self.view.addSubview(editButton)
         editButton.contentHorizontalAlignment = .left
+       
         
-        plusWidgetButton.isHidden = true
         
         
-//        menu.arrowDirection = .up
-//        menu.arrowOffset = CGFloat(2.0)
-//        menu.arrowOffset = CGFloat(2.0)
         menu.isHidden = true
         menu.frame = CGRect(x:105, y: 525, width: 200, height: 200)
-        menu.layer.borderWidth = 3.0
-        menu.layer.borderColor = UIColor.black.cgColor
         menu.layer.cornerRadius = 15.0
+        menu.dropShadow()
         
+       
         menuTable.delegate = self
         menuTable.dataSource = self
         menuTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         menuTable.separatorStyle = .singleLine
-        menuTable.layer.borderWidth = 3.0
-        menuTable.layer.borderColor = UIColor.black.cgColor
+        
         menuTable.layer.cornerRadius = 15.0
+        
+        plusWidget.frame = CGRect(x: 182, y: 724, width: 50, height: 50)
+        plusWidget.setImage(#imageLiteral(resourceName: "SquareAdd100-1"), for: .normal)
+        plusWidget.tintColor = .systemBlue
+        plusWidget.addTarget(self, action: #selector(showWidgetMenu), for: .touchUpInside)
+        plusWidget.isHidden = true
         
         self.view.addSubview(editButton)
         self.view.addSubview(menu)
+        self.view.insertSubview(plusWidget, aboveSubview: editButton)
         menu.addSubview(menuTable)
+        
+       // dismissMenu.numberOfTapsRequired = 1
+        //self.view.addGestureRecognizer(self.dismissMenu)
+        
+        // let layout = NSKeyedArchiver.archivedData(withRootObject: placeHolders.grid)
+        //self.defaults.set(layout, forKey: "layoutState")
+        
+        //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
         
     }
     
     
 
+}
+
+extension UIView {
+    func dropShadow(scale: Bool = true) {
+        layer.masksToBounds = false
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.2
+        layer.shadowOffset = .zero
+        layer.shadowRadius = 1.5
+        layer.shouldRasterize = true
+        layer.rasterizationScale = scale ? UIScreen.main.scale : 1
+    }
+    func fadeIn() {
+        // Move our fade out code from earlier
+        UIView.animate(withDuration: 0.10, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations: {
+            self.alpha = 1.0 // Instead of a specific instance of, say, birdTypeLabel, we simply set [thisInstance] (ie, self)'s alpha
+        }, completion: nil)
+    }
+    
+    func fadeOut() {
+        UIView.animate(withDuration: 0.15, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
+            self.alpha = 0.0
+        }, completion: nil)
+    }
+    
 }

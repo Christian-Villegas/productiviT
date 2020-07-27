@@ -1,17 +1,28 @@
-////
+//
 //  Widget.swift
 //  widgets
 //
 //  Created by Christopher Cordero on 6/29/20.
 //  Copyright © 2020 Christopher Cordero. All rights reserved.
 //
+
 import UIKit
+
+struct Color{
+    var color: UIColor
+    var fontColor: UIColor
+    
+    init(red_: CGFloat, green_: CGFloat, blue_: CGFloat, font_: UIColor) {
+        self.color = UIColor(red: red_, green: green_, blue: blue_, alpha: 1)
+        self.fontColor = font_
+    }
+}
+
 
 class Widget: UIView {
     
     override init(frame: CGRect) {
         self.number = 0
-        self.title = "Parent Widget"
         self.ogPosition = CGPoint(x: 0, y: 0)// this holds the staying place of the widget also top left corner
         self.ogCenter = CGPoint(x: 0, y: 0)//this holds the staying center
         self.size = 1 // size level goes up to 3
@@ -21,42 +32,50 @@ class Widget: UIView {
         self.label.textColor = .black
         self.label.autoresizingMask = [.flexibleRightMargin, .flexibleTopMargin]
         self.alpha = 1
-        self.backgroundColor = UIColor(red: 0.789, green: 0.789, blue: 0.789, alpha: 1)
+        self.backgroundColor = colors[0].color
         self.layer.cornerRadius = 20
         self.layer.masksToBounds = true
         
-        let image = UIImage(named: "icons8-enlarge-30")
-        sizeButton.setImage(image?.withTintColor(.white), for: .normal)
+        sizeButton.frame = CGRect(x: 140.0, y: 145.0, width: 25.0, height: 25.0)
+        sizeButton.setImage(#imageLiteral(resourceName: "icons8-enlarge-30"), for: .normal)
+        sizeButton.tintColor = .systemBlue
         sizeButton.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
         sizeButton.addTarget(self, action: #selector(changeSize), for: .touchUpInside)
         
+        editColor.frame = CGRect(x: 10, y: 10, width: 22.0, height: 22.0)
+        editColor.setImage(#imageLiteral(resourceName: "changeColor"), for: .normal)
+        editColor.tintColor = .systemBlue
+        editColor.addTarget(self, action: #selector(changeColor), for: .touchUpInside)
+        
+        
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panView))
         self.addGestureRecognizer(panGesture)
+        
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
         tap.numberOfTapsRequired = 2
         self.addGestureRecognizer(tap)
         
         //Initializations for addTask button
-        addTask.frame = CGRect(x: 135, y: 135, width: 35, height: 35)
+        addTask.frame = CGRect(x: 135, y: 140, width: 35, height: 35)
         addTask.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
-        addTask.layer.cornerRadius = 0.5 * addTask.bounds.size.width
-        addTask.clipsToBounds = true
-        addTask.backgroundColor = .systemBlue
-        addTask.setImage(#imageLiteral(resourceName: "plus_icon"), for: .normal)
-        addTask.tintColor = .white
-        addTask.imageEdgeInsets = .init(top:12, left: 12, bottom: 12, right: 12)
+        //addTask.layer.cornerRadius = 0.5 * addTask.bounds.size.width
+        //addTask.clipsToBounds = true
+        //addTask.backgroundColor = .systemBlue
+        addTask.setImage(#imageLiteral(resourceName: "plus"), for: .normal)
+        addTask.tintColor = .systemBlue
+        addTask.imageEdgeInsets = .init(top:3, left: 3, bottom: 3, right: 3)
         addTask.addTarget(self, action: #selector(self.addButton), for: UIControl.Event.touchUpInside)
         addTask.isHidden = true
         
         //Initializations for addTask button on full view
         fullViewAddTask.frame = CGRect(x: 320, y: 670, width: 70, height: 70)
-        fullViewAddTask.layer.cornerRadius = 0.5 * fullViewAddTask.bounds.size.width
-        fullViewAddTask.clipsToBounds = true
-        fullViewAddTask.backgroundColor = .systemBlue
-        fullViewAddTask.setImage(#imageLiteral(resourceName: "plus_icon"), for: .normal)
-        fullViewAddTask.tintColor = .white
-        fullViewAddTask.imageEdgeInsets = .init(top:22, left: 22, bottom: 22, right: 22)
+        //fullViewAddTask.layer.cornerRadius = 0.5 * fullViewAddTask.bounds.size.width
+        //fullViewAddTask.clipsToBounds = true
+        //fullViewAddTask.backgroundColor = .systemBlue
+        fullViewAddTask.setImage(#imageLiteral(resourceName: "plus"), for: .normal)
+        fullViewAddTask.tintColor = .systemBlue
+        //fullViewAddTask.imageEdgeInsets = .init(top:12, left: 12, bottom: 12, right: 12)
         fullViewAddTask.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size:25)
         fullViewAddTask.addTarget(self, action: #selector(self.addButton), for: UIControl.Event.touchUpInside)
         self.fullView.addSubview(fullViewAddTask)
@@ -73,6 +92,7 @@ class Widget: UIView {
         self.addSubview(sizeButton)
         self.addSubview(addTask)
         self.addSubview(label)
+        self.addSubview(editColor)
         
     }
     
@@ -93,7 +113,9 @@ class Widget: UIView {
                currentWidget = self.number
                topController.performSegue(withIdentifier: "showDetail", sender: nil)
            }
-       }
+    }
+    
+    
     
     //Delete Widget: At the click of a button located on the widget, removes the widget as well as clears it's access and empties the placeholders it was previously stored on.
     @objc func deleteWidget(sender: UIButton) {
@@ -105,7 +127,7 @@ class Widget: UIView {
             self.clearWPHA()
             for i in (0...(screenWidgets.count-1)){
                 if(screenWidgets[i] == self) {
-                    screenWidgets.remove(at: i) //remove from
+                    screenWidgets.remove(at: i) //remove from widget array
                     break
                 }
             }
@@ -119,7 +141,8 @@ class Widget: UIView {
             }
             topController.present(alert, animated: true, completion: nil)
         }
-        widgetList.append(self.title!)
+        widgetList.append(self.title)
+        
     }
     
     func updateView(){
@@ -503,11 +526,35 @@ class Widget: UIView {
             }
         } // END OF SIZE 3 //
     }
+    
+    @objc func changeColor(){
+        //if colorMenu!.isHidden == true {colorMenu!.isHidden = false}
+        //else{colorMenu!.isHidden = true}
+        colorIndex += 1
+        if colorIndex < (colors.count) {
+            self.backgroundColor = colors[colorIndex].color
+            self.addTask.tintColor = .white
+            self.label.textColor = .white
+            self.sizeButton.tintColor = .white
+            self.editColor.tintColor = self.backgroundColor
+        }
+        else{
+            colorIndex = 0
+            self.backgroundColor = colors[0].color
+            self.addTask.tintColor = .systemBlue
+            self.label.textColor = .black
+            self.sizeButton.tintColor = .systemBlue
+            self.editColor.tintColor = .systemBlue
+        }
+        
+        
+        
+    }
 
     //Data Members://
-    var title: String?
-    let delButton = UIButton(frame: CGRect(x: 135, y: 4, width: 40.0, height: 40.0))
-    let sizeButton = UIButton(frame: CGRect(x: 140.0, y: 140.0, width: 30.0, height: 30.0))
+    let delButton = UIButton(frame: CGRect(x: 135, y: 3, width: 40.0, height: 40.0))
+    let sizeButton = UIButton(type: .system)
+    let editColor = UIButton(type: .system)
     let fullView = UIView(frame: CGRect(x: 0, y: 74, width: 414.0, height: 746.0))
     var ogPosition: CGPoint
     var ogCenter: CGPoint
@@ -515,7 +562,9 @@ class Widget: UIView {
     var placeHoldersAccessed: Array<PlaceHolder>
     var number: Int
     let shield = UIView(frame: CGRect(x: 0, y: 0, width: 177, height: 177))
-    var label = UILabel(frame: CGRect(x: 20, y: 141, width: 200, height: 21)) //label to display title on widget
+    var label = UILabel(frame: CGRect(x: 20, y: 146, width: 200, height: 21)) //label to display title on widget
     let addTask = UIButton(type: .system) //button to add to todo list
     let fullViewAddTask = UIButton(type: .system) //button on full view that adds a task
+    var colorIndex = 0
+    var title = "Parent Widget"
 }
