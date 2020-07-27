@@ -164,31 +164,6 @@
             </objects>
             <point key="canvasLocation" x="53.623188405797109" y="123.88392857142857"/>
         </scene>
-        <!--Pop Up View Controller-->
-        <scene sceneID="4S8-uF-RHn">
-            <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="b8L-dc-Ae4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <viewController id="QWE-tG-sWb" customClass="PopUpViewController" customModule="widgets" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="QSa-k3-B8L">
-                        <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rxg-m5-95L">
-                                <rect key="frame" x="152" y="275" width="47" height="20.5"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.56480497119999995" green="0.1689142287" blue="0.1675068438" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
-                            </stackView>
-                        </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="72e-R7-CVD"/>
-                    </view>
-                    <value key="contentSizeForViewInPopover" type="size" width="200" height="200"/>
-                    <size key="freeformSize" width="200" height="200"/>
-                </viewController>
-            </objects>
-            <point key="canvasLocation" x="1823" y="-368"/>
-        </scene>
     </scenes>
     <resources>
         <image name="SquareAdd50" width="50" height="50"/>

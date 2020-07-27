@@ -22,6 +22,7 @@ struct PlaceHolder{
     var number: Int
     
     init(row: Int, column: Int) {
+        
         self.filled = false
         self.widget = nil
         self.number = 0
@@ -33,7 +34,6 @@ struct PlaceHolder{
             self.posX = 217
             self.xC = 305.5
         }
-
         self.posY = 44 + Double(row * 185)
         self.yC = 132.5 + Double(row * 185)
         self.frame = CGRect(x: self.posX, y: self.posY, width: 177, height: 177)
@@ -159,9 +159,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let image = UIImage(named: "SquareAdd50")
     
     
-    let menu = UIView()
+    let menu = widgetsMenuPopOverView()
+    let screen = UIView()
     let menuTable = UITableView(frame: CGRect(x: 0, y: 0, width: 200, height: 200), style: .plain)
-
+    
+    
     @IBOutlet weak var emptyMessage: UILabel!
     @IBOutlet weak var plusWidgetButton: UIButton!
     
@@ -189,60 +191,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         print("player name is \(player.name)")
     }
     
-
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) // func for popover
-//    {
-//        if segue.identifier == "showPopOver"
-//        {
-//            let vc = segue.destination
-//
-//
-//            vc.preferredContentSize = CGSize(width: 200, height: 200)
-//
-//            let controller = vc.popoverPresentationController
-//
-//            controller?.delegate = self
-//            //you could set the following in your storyboard
-//            controller?.sourceView = self.view
-//            controller?.sourceRect = CGRect(x:105, y: 530,width: 200,height: 200)
-//            controller?.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
-//            print("This thing happened")
-//        }
-//    }
-//
-//    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-//        print("this thing worked")
-//        return UIModalPresentationStyle.none
-//    }
-    
-    
-    
-//    func addButtons() -> []{
-//        let numberOfTypes = 2
-//        var widgetsOnScreen = [Int]()
-//        for row in (0...3){
-//            for column in (0...1){
-//                if((placeHolders.grid[row][column].widget) != nil){
-//                    widgetsOnScreen.append(placeHolders.grid[row][column].widget!.number)
-//                }
-//            }
-//        }
-//        for i in (0...numberOfTypes){
-//                if(!widgetsOnScreen.contains(i)){
-//                    if i == 0{
-//                    }else if i == 2{
-//                    }else if i == 1{
-//                    }
-//                }
-//            }
-//        }
-
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return widgetList.count
-        
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
@@ -257,10 +210,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        
         let buttonName = widgetList[indexPath.row]
-        //"To Do Widget", "Appointments Widget", "Parents Widget"
         switch buttonName {
         case "To Do Widget":
             self.addToDo()
@@ -293,6 +243,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.view.insertSubview(newWidget, belowSubview: menu)
             screenWidgets.append(newWidget)
             emptyMessage.isHidden = true
+            self.screen.isHidden = true
         }
     }
     
@@ -305,6 +256,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             taskW = toDoWidget
             placeNextWidget(PHA: &placeHolders.grid, addedWidget: toDoWidget)
             emptyMessage.isHidden = true
+            self.screen.isHidden = true
         }
     }
     
@@ -318,9 +270,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             apptW = apptWidget
             placeNextWidget(PHA: &placeHolders.grid, addedWidget: apptWidget)
             emptyMessage.isHidden = true
-            
+            self.screen.isHidden = true
         }
-        //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
     }
     
     func placeNextWidget(PHA: inout [[PlaceHolder]], addedWidget: Widget){
@@ -347,7 +298,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         else {editOn = false}
         if editOn == true {
             editButton.setTitle("done", for: .normal)
-           plusWidgetButton.isHidden = false
+            plusWidgetButton.isHidden = false
             if screenWidgets.count > 0{
                 for i in 0...(screenWidgets.count-1) {
                     screenWidgets[i].delButton.isHidden = false
@@ -389,9 +340,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             else{
                 emptyMessage.isHidden = false
             }
-            
-            //self.defaults.set(NSKeyedArchiver.archivedData (withRootObject: screenWidgets), forKey: "widgetArray")
-            
         }
     }
     
@@ -408,11 +356,27 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return false
     }
     
+    @objc func handleDismiss() {
+             // Dismisses the calendar with fade animation
+        if(!self.menu.isHidden && !self.menuTable.isHidden){
+               UIView.animate(withDuration: 0.3, animations: {
+             }) { ( finished ) in
+               self.menu.isHidden = true
+               self.menuTable.isHidden = true
+                self.screen.isHidden = true
+           }
+         }
+       }
+       
+    
     @IBAction func showWidgetMenu(_ sender: Any) {
-         menuTable.reloadData()
-        menu.isHidden = false
-        print("menu is no longer hidden")
+        self.screen.isHidden = false
+        self.menuTable.reloadData()
+        self.menu.isHidden = false
+        self.menuTable.isHidden = false
     }
+    
+   
     
     
     
@@ -424,19 +388,33 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         editButton.setTitle("edit", for: .normal)
         editButton.contentHorizontalAlignment = .right
         editButton.addTarget(self, action: #selector(self.editHome), for: UIControl.Event.touchUpInside)
-        self.view.addSubview(editButton)
         editButton.contentHorizontalAlignment = .left
         
         plusWidgetButton.isHidden = true
-
+        
+        
         menu.isHidden = true
-        menu.frame = CGRect(x: 91, y: 550, width: 200, height: 200)
-        menu.
+        menu.frame = CGRect(x:105, y: 525, width: 200, height: 200)
+        menu.layer.borderWidth = 3.0
+        menu.layer.borderColor = UIColor.black.cgColor
+        menu.layer.cornerRadius = 15.0
+                  
         menuTable.delegate = self
         menuTable.dataSource = self
         menuTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        menuTable.separatorStyle = .none
+        menuTable.separatorStyle = .singleLine
+        menuTable.layer.borderWidth = 3.0
+        menuTable.layer.borderColor = UIColor.black.cgColor
+        menuTable.layer.cornerRadius = 15.0
+        
+        screen.frame = CGRect(x: 105, y: 300, width: .max, height: .max)
+        screen.backgroundColor = .none
+        screen.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(ViewController.handleDismiss)))
+        screen.isHidden = true
+        
+        self.view.addSubview(editButton)
         self.view.addSubview(menu)
+        self.view.insertSubview(screen, belowSubview: menu)
         menu.addSubview(menuTable)
         
     }

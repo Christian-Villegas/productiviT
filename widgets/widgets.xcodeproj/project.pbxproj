@@ -21,6 +21,7 @@
 		6EED172424A1BF8400C8AF96 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EED172224A1BF8400C8AF96 /* LaunchScreen.storyboard */; };
 		6EF9B8C524AAE4220077D7AB /* Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF9B8C424AAE4220077D7AB /* Widget.swift */; };
 		8641CEC124CA2B6A006982C1 /* PopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8641CEC024CA2B6A006982C1 /* PopUpViewController.swift */; };
+		868B9FC624CEA7DA00E9D83E /* widgetsMenuPopOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868B9FC524CEA7D900E9D83E /* widgetsMenuPopOverView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		6EED172524A1BF8400C8AF96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6EF9B8C424AAE4220077D7AB /* Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Widget.swift; sourceTree = "<group>"; };
 		8641CEC024CA2B6A006982C1 /* PopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpViewController.swift; sourceTree = "<group>"; };
+		868B9FC524CEA7D900E9D83E /* widgetsMenuPopOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = widgetsMenuPopOverView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 				6EED171924A1BF8000C8AF96 /* SceneDelegate.swift */,
 				6E048E4024C2DCB800EA6388 /* slideUpVC.swift */,
 				6EED171B24A1BF8000C8AF96 /* ViewController.swift */,
+				868B9FC524CEA7D900E9D83E /* widgetsMenuPopOverView.swift */,
 				8641CEC024CA2B6A006982C1 /* PopUpViewController.swift */,
 				6EED171D24A1BF8000C8AF96 /* Main.storyboard */,
 				6E04B5DA24AD42F4004E8AD2 /* SmartGoal.swift */,
@@ -171,6 +174,7 @@
 				6E048E3D24C2DC3000EA6388 /* ToDoWidget.swift in Sources */,
 				6E69C1FA24C4344C00F0D613 /* ProfileViewController.swift in Sources */,
 				6ED40A0E24C6985F007B2546 /* AppointmentsWidget.swift in Sources */,
+				868B9FC624CEA7DA00E9D83E /* widgetsMenuPopOverView.swift in Sources */,
 				6EED171A24A1BF8000C8AF96 /* SceneDelegate.swift in Sources */,
 				6EF9B8C524AAE4220077D7AB /* Widget.swift in Sources */,
 			);
