@@ -5,6 +5,7 @@
 //  Created by Christopher Cordero on 7/20/20.
 //  Copyright © 2020 Christopher Cordero. All rights reserved.
 //
+
 import UIKit
 
 class AppointmentsWidget: Widget, UITableViewDelegate, UITableViewDataSource {
@@ -24,6 +25,7 @@ class AppointmentsWidget: Widget, UITableViewDelegate, UITableViewDataSource {
         self.number = 2//number assigned to ToDo widgets, for checking which widget to display when full view is requested
         self.label.text = "Appointments"//widget will display this when first added
         self.title = "Appointments Widget"
+        
         //initializations for datepicker module
         datePicker.frame = CGRect(x: 10, y: 50, width: self.frame.width, height: 200)
         datePicker.timeZone = NSTimeZone.local
@@ -41,7 +43,8 @@ class AppointmentsWidget: Widget, UITableViewDelegate, UITableViewDataSource {
         self.fullView.insertSubview(taskList, belowSubview: fullViewAddTask)
      
         //initializations for mini table
-        miniTable.backgroundColor = .none
+        miniTable.backgroundColor = .white
+        miniTable.alpha = 0.7
         miniTable.separatorStyle = UITableViewCell.SeparatorStyle.none
         miniTable.delegate = self
         miniTable.dataSource = self
@@ -117,6 +120,7 @@ class AppointmentsWidget: Widget, UITableViewDelegate, UITableViewDataSource {
                 self.timeLeftLabel.text = ""
                 if itemArray.count > 0 {self.itemArray.remove(at:indexPath.row)}
                 //self.defaults.set(self.itemArray, forKey: "ToDoListArray")
+
             }
             tableView.deleteRows(at: [indexPath], with: .fade)
             self.taskList.reloadData()
@@ -169,7 +173,7 @@ class AppointmentsWidget: Widget, UITableViewDelegate, UITableViewDataSource {
             self.miniTable.reloadData()
         }
         alert.addTextField { (alertTextField) in
-            alertTextField.placeholder = "Create New Item"
+            alertTextField.placeholder = "Add Event Title"
             textField = alertTextField
         }
         alert.addTextField { (alertTextField) in
@@ -239,16 +243,18 @@ class AppointmentsWidget: Widget, UITableViewDelegate, UITableViewDataSource {
     override func updateView() {
         switch self.size {
         case 1:
-            miniTable.frame = CGRect(x: 0, y: 3, width: 172, height: 130)
+            miniTable.frame = CGRect(x: 0, y: 0, width: 177, height: 140)
             shield.frame = CGRect(x: 0, y: 0, width: 177, height: 177)
         case 2:
-            miniTable.frame = CGRect(x: 0, y: 3, width: 369, height: 130)
+            miniTable.frame = CGRect(x: 0, y: 0, width: 374, height: 140)
             shield.frame = CGRect(x: 0, y: 0, width: 374, height: 177)
         case 3:
-            miniTable.frame = CGRect(x: 0, y: 3, width: 369, height: 318)
+            miniTable.frame = CGRect(x: 0, y: 0, width: 374, height: 325)
             shield.frame = CGRect(x: 0, y: 0, width: 374, height: 362)
         default:
-            miniTable.frame = CGRect(x: 0, y: 3, width: 172, height: 130)
+            miniTable.frame = CGRect(x: 0, y: 0, width: 177, height: 140)
+            
+            shield.frame = CGRect(x: 0, y: 0, width: 177, height: 177)
         }
     }
     

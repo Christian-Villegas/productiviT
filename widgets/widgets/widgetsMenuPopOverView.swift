@@ -1,11 +1,3 @@
-//
-//  widgetsMenuPopOverView.swift
-//  widgets
-//
-//  Created by Christian Villegas on 7/26/20.
-//  Copyright © 2020 Christopher Cordero. All rights reserved.
-//
-
 import UIKit
 
 class widgetsMenuPopOverView: UIPopoverBackgroundView {
