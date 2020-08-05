@@ -8,47 +8,108 @@
 
 import UIKit
 
-class Widget: UIView {
-
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
+struct Color{
+    var color: UIColor
+    var fontColor: UIColor
+    
+    init(red_: CGFloat, green_: CGFloat, blue_: CGFloat, font_: UIColor) {
+        self.color = UIColor(red: red_, green: green_, blue: blue_, alpha: 1)
+        self.fontColor = font_
     }
-    */
+}
+
+
+class Widget: UIView {
     
     override init(frame: CGRect) {
-        self.title = ""
-        // this holds the staying place of the widget also top left corner
-        self.ogPosition = CGPoint(x: 0, y: 0)
-        //this holds the staying center
-        self.ogCenter = CGPoint(x: 0, y: 0)
-        // size level goes up to 3
-        self.size = 1
-        //empty array of placeHolders the widget is on
-        self.placeHoldersAccessed = []
+        self.number = 0
+        self.ogPosition = CGPoint(x: 0, y: 0)// this holds the staying place of the widget also top left corner
+        self.ogCenter = CGPoint(x: 0, y: 0)//this holds the staying center
+        self.size = 1 // size level goes up to 3
+        self.placeHoldersAccessed = [] //empty array of placeHolders the widget is on
         
         super.init(frame: frame)
-        self.backgroundColor = .lightGray
-        self.alpha = 0.5
+        self.label.textColor = .black
+        self.label.autoresizingMask = [.flexibleRightMargin, .flexibleTopMargin]
+        self.alpha = 1
+        self.backgroundColor = colors[0].color
         self.layer.cornerRadius = 20
         self.layer.masksToBounds = true
+        
+        sizeButton.frame = CGRect(x: 140.0, y: 145.0, width: 25.0, height: 25.0)
+        sizeButton.setImage(#imageLiteral(resourceName: "icons8-enlarge-30"), for: .normal)
+        sizeButton.tintColor = .systemBlue
+        sizeButton.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
+        sizeButton.addTarget(self, action: #selector(changeSize), for: .touchUpInside)
+        
+        editColor.frame = CGRect(x: 10, y: 10, width: 22.0, height: 22.0)
+        editColor.setImage(#imageLiteral(resourceName: "changeColor"), for: .normal)
+        editColor.tintColor = .systemBlue
+        editColor.addTarget(self, action: #selector(changeColor), for: .touchUpInside)
+        
+        
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panView))
         self.addGestureRecognizer(panGesture)
         
-        sizeButton.setTitle("change size", for: .normal)
-        sizeButton.addTarget(self, action: #selector(changeSize), for: .touchUpInside)
-        self.addSubview(sizeButton)
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
+        tap.numberOfTapsRequired = 2
+        self.addGestureRecognizer(tap)
+        
+        //Initializations for addTask button
+        addTask.frame = CGRect(x: 135, y: 140, width: 35, height: 35)
+        addTask.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
+        addTask.setImage(#imageLiteral(resourceName: "plus"), for: .normal)
+        addTask.tintColor = .systemBlue
+        addTask.imageEdgeInsets = .init(top:3, left: 3, bottom: 3, right: 3)
+        addTask.addTarget(self, action: #selector(self.addButton), for: UIControl.Event.touchUpInside)
+        addTask.isHidden = true
+        
+        //Initializations for addTask button on full view
+        fullViewAddTask.frame = CGRect(x: 320, y: 670, width: 70, height: 70)
+        fullViewAddTask.setImage(#imageLiteral(resourceName: "plus"), for: .normal)
+        fullViewAddTask.tintColor = .systemBlue
+
+        fullViewAddTask.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size:25)
+        fullViewAddTask.addTarget(self, action: #selector(self.addButton), for: UIControl.Event.touchUpInside)
+        self.fullView.addSubview(fullViewAddTask)
+        self.fullView.backgroundColor = .systemBackground
+        
+        //Initializations for Delete Button
         delButton.setTitle("x", for: .normal)
+        delButton.setTitleColor(.systemRed, for: .normal)
+        delButton.autoresizingMask = [.flexibleLeftMargin, .flexibleBottomMargin]
         delButton.addTarget(self, action: #selector(deleteWidget), for: .touchUpInside)
+        
+        self.addSubview(self.shield)
         self.addSubview(delButton)
+        self.addSubview(sizeButton)
+        self.addSubview(addTask)
+        self.addSubview(label)
+        self.addSubview(editColor)
+        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    @objc func addButton(_ sender: UIButton!) {}
+    
+    @objc func doubleTapped() {
+           if editOn == true {return}//returns if in edit mode
+           let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+
+           if var topController = keyWindow?.rootViewController {
+               while let presentedViewController = topController.presentedViewController {
+                   topController = presentedViewController
+               }
+               currentWidget = self.number
+               topController.performSegue(withIdentifier: "showDetail", sender: nil)
+           }
+    }
+    
+    
     
     //Delete Widget: At the click of a button located on the widget, removes the widget as well as clears it's access and empties the placeholders it was previously stored on.
     @objc func deleteWidget(sender: UIButton) {
@@ -56,21 +117,16 @@ class Widget: UIView {
         if editOn == false {return} // returns if not in edit mode
         //prompts user with alert
         let alert = UIAlertController(title: "Are you sure?", message: "Deleting this widget will also delete all of its data.", preferredStyle: .alert)
-        
         alert.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: {action in
-            
             self.clearWPHA()
-            
             for i in (0...(screenWidgets.count-1)){
                 if(screenWidgets[i] == self) {
                     screenWidgets.remove(at: i) //remove from widget array
                     break
                 }
             }
-            
             self.removeFromSuperview()
-            }))
-        
+        }))
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
         if var topController = keyWindow?.rootViewController {
@@ -79,6 +135,11 @@ class Widget: UIView {
             }
             topController.present(alert, animated: true, completion: nil)
         }
+        widgetList.append(self.title)
+        
+    }
+    
+    func updateView(){
     }
     
     @objc func changeSize(sender: UIButton) {
@@ -94,6 +155,7 @@ class Widget: UIView {
             let newY = self.calculateCoords(PHA: self.placeHoldersAccessed).y
             self.ogCenter = CGPoint(x:newX, y:newY)
             self.size = 2
+            updateView()
         } else if(self.size == 2 && self.ogPosition.x == CGFloat(placeHolders.grid[0][0].posX) && checkSizeAvailablility(start: self.placeHoldersAccessed[0], desiredSize: 3)){
             
             self.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 374.0, height: 362.0)
@@ -110,6 +172,7 @@ class Widget: UIView {
             let newY = self.calculateCoords(PHA: self.placeHoldersAccessed).y
             self.ogCenter = CGPoint(x:newX, y:newY)
             self.size = 3
+            updateView()
         } else {
             self.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 177.0, height: 177.0)
             
@@ -123,6 +186,7 @@ class Widget: UIView {
             let newY = self.calculateCoords(PHA: self.placeHoldersAccessed).y
             self.ogCenter = CGPoint(x:newX, y:newY)
             self.size = 1
+            updateView()
         }
         placeHolders.gridPrint()
     }
@@ -142,7 +206,6 @@ class Widget: UIView {
         for (index, _) in self.placeHoldersAccessed.enumerated() {
             placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].filled = false
             placeHolders.grid[getPlaceHolder(number: placeHoldersAccessed[index].number).row][getPlaceHolder(number: placeHoldersAccessed[index].number).column].widget = nil
-            
             self.placeHoldersAccessed[index].filled = false
             self.placeHoldersAccessed[index].widget = nil
         }
@@ -163,28 +226,25 @@ class Widget: UIView {
         return true
     }
     
+    // calculates the center coords
     func calculateCoords(PHA: [PlaceHolder]) -> (x: Double, y:Double){
         var x = 0.0
         var y = 0.0
         var count = 1
         for ph in PHA{
-            //print("The \(count) placeholder postion x is \(ph.posX) position y is \(ph.posY)")
             x += ph.xC
             y += ph.yC
             count += 1
         }
         x /= Double(PHA.count)
         y /= Double(PHA.count)
-        //print("Calculated x: \(x) Calculated y: \(y)")
         return(x, y)
     }
     
     @objc func panView(_ panGesture: UIPanGestureRecognizer) {
-       
         if editOn == false {return} // returns if not in edit mode
         
         let translation = panGesture.translation(in: self)
-
         if let viewToDrag = panGesture.view {
             viewToDrag.center = CGPoint(x: viewToDrag.center.x + translation.x,
                 y: viewToDrag.center.y + translation.y)
@@ -376,6 +436,7 @@ class Widget: UIView {
                     self.ogPosition = CGPoint(x: placeHolders.grid[1][0].posX, y: placeHolders.grid[1][0].posY)
                     self.ogCenter = CGPoint(x: columnMiddle, y: rowOne)
                     placeHolders.updateFilled()
+                    print(ogCenter)
                 }
             // row 2
             } else if(abs(columnMiddle - Double(panGestureX)) <= 197 && abs(rowTwo - Double(panGestureY)) <= 98.5 ) && (translation.x == 0.0 && translation.y == 0.0) {
@@ -461,16 +522,44 @@ class Widget: UIView {
             }
         } // END OF SIZE 3 //
     }
-
-
     
+    @objc func changeColor(){
+
+        colorIndex += 1
+        if colorIndex < (colors.count) {
+            self.backgroundColor = colors[colorIndex].color
+            self.addTask.tintColor = .white
+            self.label.textColor = .white
+            self.sizeButton.tintColor = .white
+            self.editColor.tintColor = self.backgroundColor
+        }
+        else{
+            colorIndex = 0
+            self.backgroundColor = colors[0].color
+            self.addTask.tintColor = .systemBlue
+            self.label.textColor = .black
+            self.sizeButton.tintColor = .systemBlue
+            self.editColor.tintColor = .systemBlue
+        }
+        
+        
+        
+    }
+
     //Data Members://
-    var title: String
-    let delButton = UIButton(frame: CGRect(x: 135, y: 4, width: 40.0, height: 40.0))
-    let sizeButton = UIButton(frame: CGRect(x: 20.0, y: 20.0, width: 100.0, height: 40.0))
+    let delButton = UIButton(frame: CGRect(x: 135, y: 3, width: 40.0, height: 40.0))
+    let sizeButton = UIButton(type: .system)
+    let editColor = UIButton(type: .system)
+    let fullView = UIView(frame: CGRect(x: 0, y: 74, width: 414.0, height: 746.0))
     var ogPosition: CGPoint
     var ogCenter: CGPoint
     var size: Int
     var placeHoldersAccessed: Array<PlaceHolder>
-    
+    var number: Int
+    let shield = UIView(frame: CGRect(x: 0, y: 0, width: 177, height: 177))
+    var label = UILabel(frame: CGRect(x: 20, y: 146, width: 200, height: 21)) //label to display title on widget
+    let addTask = UIButton(type: .system) //button to add to todo list
+    let fullViewAddTask = UIButton(type: .system) //button on full view that adds a task
+    var colorIndex = 0
+    var title = "Parent Widget"
 }
